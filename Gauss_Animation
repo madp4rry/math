@@ -27,7 +27,7 @@ class Video1(Scene):
 
 
         matrix1 = Matrix([[ 1, 2, 3, 4], 
-                         [9 , 10, 11, 12], 
+                         [ 12, 13, 14, 16], 
                          [0, 6, 11, 12]]).shift(DOWN *2)
         matrix1_elements = matrix1.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix1.get_height()).next_to(matrix1_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
@@ -36,7 +36,7 @@ class Video1(Scene):
         matrix_with_line1 = VGroup(matrix1, vertical_line).scale(0.6)
         
         matrix2 = Matrix([[ 1, 2, 3, 4], 
-                         [0, 10, 11, 12],  
+                         [0, 13, 14, 16],  
                          [0, 6, 7, 8]]).shift(DOWN *2)
         matrix2_elements = matrix2.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix2.get_height()).next_to(matrix2_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
@@ -44,7 +44,7 @@ class Video1(Scene):
         matrix_with_line2 = VGroup(matrix2, vertical_line).scale(0.6)
         
         matrix3 = Matrix([[ 1, 2, 3, 4], 
-                         [ 0, 9, 10, 11],
+                         [ 0, 13, 14, 16],
                          [0, 0, 7, 8]]).shift(DOWN *2)
         matrix3_elements = matrix3.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix3.get_height()).next_to(matrix3_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
