@@ -3,9 +3,9 @@ from manim import *
 class Video1(Scene):
     def construct(self):
 
-        matrix0= Matrix([[ 1, 2, 3, 4],  
-                         [5, 6, 7, 8],
-                         [9, 10, 11, 12]])
+        matrix0= Matrix([["a_{11}", "a_{12}", "a_{13}", "b_{1}"],
+             ["a_{21}", "a_{22}", "a_{23}", "b_{2}"],
+             ["a_{31}", "a_{32}", "a_{33}", "b_{3}"]])
         matrix0_elements = matrix0.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix0.get_height()).next_to(matrix0_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
         vertical_line.set_stroke(color=WHITE, width=1.5)
@@ -15,10 +15,9 @@ class Video1(Scene):
         second_row_elements = VGroup(matrix0_elements[4 : 8])
         third_row_elements = VGroup(matrix0_elements[8 :12])
     
-        matrix05 = Matrix([[ 1, 2, 3, 4],  
-                         [12, 13, 14, 16],
-                         [5 , 6, 7, 8],
-                         ])
+        matrix05 = Matrix([["a_{11}", "a_{12}", "a_{13}", "b_{1}"],
+             ["ka_{31}", "ka_{32}", "ka_{33}", "kb_{3}"],
+             ["a_{21}", "a_{22}", "a_{23}", "b_{2}"]])
         matrix05_elements = matrix05.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix05.get_height()).next_to(matrix05_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
         vertical_line.set_stroke(color=WHITE, width=1.5)
@@ -26,26 +25,26 @@ class Video1(Scene):
         k_row_elements =VGroup(matrix05_elements[4 : 8])
 
 
-        matrix1 = Matrix([[ 1, 2, 3, 4], 
-                         [ 12, 13, 14, 16], 
-                         [0, 6, 11, 12]]).shift(DOWN *2)
+        matrix1 = Matrix([["a_{11}", "a_{12}", "a_{13}", "b_{1}"],
+             ["ka_{31}", "ka_{32}", "ka_{33}", "kb_{3}"],
+             ["0", "a_{22}", "a_{23}", "b_{2}"]]).shift(DOWN *2)
         matrix1_elements = matrix1.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix1.get_height()).next_to(matrix1_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
         vertical_line.set_stroke(color=WHITE, width=1.5)
         
         matrix_with_line1 = VGroup(matrix1, vertical_line).scale(0.6)
         
-        matrix2 = Matrix([[ 1, 2, 3, 4], 
-                         [0, 13, 14, 16],  
-                         [0, 6, 7, 8]]).shift(DOWN *2)
+        matrix2 = Matrix([["a_{11}", "a_{12}", "a_{13}", "b_{1}"],
+             ["0", "ka_{32}", "ka_{33}", "kb_{3}"],
+             ["0", "a_{22}", "a_{23}", "b_{2}"]]).shift(DOWN *2)
         matrix2_elements = matrix2.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix2.get_height()).next_to(matrix2_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
         vertical_line.set_stroke(color=WHITE, width=1.5)
         matrix_with_line2 = VGroup(matrix2, vertical_line).scale(0.6)
         
-        matrix3 = Matrix([[ 1, 2, 3, 4], 
-                         [ 0, 13, 14, 16],
-                         [0, 0, 7, 8]]).shift(DOWN *2)
+        matrix3 = Matrix([["a_{11}", "a_{12}", "a_{13}", "b_{1}"],
+             ["0", "ka_{32}", "ka_{33}", "kb_{3}"],
+             ["0", "0", "a_{33}", "b_{3}"]]).shift(DOWN *2)
         matrix3_elements = matrix3.get_entries()
         vertical_line = Line(UP, DOWN).set_height(matrix3.get_height()).next_to(matrix3_elements[2], RIGHT, buff=0.5).shift(DOWN * 0.75)
         vertical_line.set_stroke(color=WHITE, width=1.5)
@@ -54,11 +53,9 @@ class Video1(Scene):
         Constant = MathTex(r"\cdot k").shift(RIGHT *1.9).scale(0.7)
 
         DownArrow = Tex(r"$\big\Downarrow$").scale(1.5)
-        
-        def update_func(m, alpha):
-            m[0].become(matrix_with_line0[0].copy().interpolate(matrix_with_line05[0], alpha))
-            m[1].become(matrix_with_line0[1].copy().interpolate(matrix_with_line05[1], alpha))
 
+        Multiplier = MathTex(r"III - II").shift(RIGHT*2.25 + UP*1.5).scale(0.5)
+        
         self.play(Create(matrix_with_line0))
         self.wait(2)
         self.play(second_row_elements.animate.scale(1).shift(DOWN*0.5), 
@@ -66,14 +63,25 @@ class Video1(Scene):
         self.wait(2)
         self.play(Create(Constant))
         self.play(Transform(third_row_elements, k_row_elements), FadeOut(Constant))
-        self.play(matrix_with_line0.animate.scale(1).shift(UP * 2))
+        self.play(matrix_with_line0.animate.scale(1).shift(UP * 2), run_time=1.5)
+        self.wait(2)
+        self.play(Create(Multiplier))
         self.play(FadeIn(DownArrow))
         self.play(Create(matrix_with_line1))
-        self.play(FadeOut(matrix_with_line0))
-        self.play(matrix_with_line1.animate.scale(1).shift(UP * 4))
+        self.wait(2)
+        self.play(FadeOut(matrix_with_line0, Multiplier))
+        self.play(matrix_with_line1.animate.scale(1).shift(UP * 4), run_time=1.5)
         self.play(Create(matrix_with_line2))
+        self.wait(2)
         self.play(FadeOut(matrix_with_line1))
-        self.play(matrix_with_line2.animate.scale(1).shift(UP * 4))
+        self.play(matrix_with_line2.animate.scale(1).shift(UP * 4), run_time=1.5)
         self.play(Create(matrix_with_line3))
-        self.play(matrix_with_line2.animate.scale(1).shift(UP * 4))
-        self.play(Succession(FadeOut(DownArrow, matrix_with_line2), matrix_with_line3.animate.scale(1).shift(UP * 2)))
+        self.wait(2)
+        self.play(FadeOut(matrix_with_line2))
+        self.play(Succession(FadeOut(DownArrow), matrix_with_line3.animate.scale(1).shift(UP * 2)))
+
+    
+
+
+
+
