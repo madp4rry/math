@@ -1,0 +1,279 @@
+from manim import *
+
+class Video1(Scene):
+    def construct(self):
+
+        matrix0= Matrix([
+            [ 1, 0, 1],
+            [ 2, 1, 0]
+             ]).shift(LEFT*4).scale(0.7)
+       
+        matrix0_elements = matrix0.get_entries()
+        
+        height = matrix0.get_height
+
+        NameA = MathTex("A =").next_to(matrix0, LEFT).scale(0.7)
+        
+        first_element = VGroup(matrix0_elements[0])
+        second_element = VGroup(matrix0_elements[1])
+        third_element = VGroup(matrix0_elements[2])
+        fourth_element = VGroup(matrix0_elements[3])
+        fifth_element = VGroup(matrix0_elements[4])
+        sixth_element = VGroup(matrix0_elements[5])
+
+        first_element_copy = first_element.copy()
+        second_element_copy = second_element.copy()
+        third_element_copy = third_element.copy()
+        fourth_element_copy = fourth_element.copy()
+        fifth_element_copy = fifth_element.copy()
+        sixth_element_copy = sixth_element.copy()
+
+        matrix1= Matrix([
+            [ 2, 0, 1],
+            [ 1, 0, 1],
+            [ 1, 1, 0]
+             ]).scale(0.7)
+        
+        matrix1_copy = matrix1.copy()
+        matrix1_copy_elements = matrix1_copy.get_entries()
+
+        NameB = MathTex("B =").next_to(matrix1, LEFT).scale(0.7)
+        
+        first_element2 = VGroup(matrix1_copy_elements[0])
+        second_element2 = VGroup(matrix1_copy_elements[1])
+        third_element2 = VGroup(matrix1_copy_elements[2])
+        fourth_element2 = VGroup(matrix1_copy_elements[3])
+        fifth_element2 = VGroup(matrix1_copy_elements[4])
+        sixth_element2 = VGroup(matrix1_copy_elements[5])
+        seventh_element2 = VGroup(matrix1_copy_elements[6])
+        eigth_element2 = VGroup(matrix1_copy_elements[7])
+        ninth_element2 = VGroup(matrix1_copy_elements[8])
+
+        matrix2= Matrix([
+            [ 3, 1, 1],
+            [ 5, 0, 3]
+            ]).scale(0.7).shift(RIGHT*4.5)
+
+        NameAB = MathTex("AB =").next_to(matrix2, LEFT).scale(0.7)
+
+        left_bracket = Tex(r"\left[").scale(3).stretch_to_fit_height(4).shift(RIGHT * 0.8)
+        right_bracket = Tex(r"\right]").scale(3).stretch_to_fit_height(4).shift(RIGHT * 9)
+        matrix_outline = VGroup(left_bracket, right_bracket).scale(0.3)
+
+        matrix_outline.next_to(NameAB)
+
+        Plus1 = MathTex("+").to_corner(UL).shift(DOWN*1.95 + RIGHT*3.65).scale(0.5)
+        Plus2 = MathTex("+").to_corner(UL).shift(DOWN*1.95 + RIGHT*4.65).scale(0.5)
+        Multi1 = MathTex("\\cdot").to_corner(UL).shift(DOWN*2.1 + RIGHT*3.3)
+        Multi2 = MathTex("\\cdot").to_corner(UL).shift(DOWN*2.1 + RIGHT*4.3)
+        Multi3 = MathTex("\\cdot").to_corner(UL).shift(DOWN*2.1 + RIGHT*5.3)
+        Equal = MathTex("=").to_corner(UL).shift(DOWN*2.05 + RIGHT*5.7).scale(0.5)
+        
+        result_1 = MathTex("3").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_1_copy = result_1.copy()
+        result_2 = MathTex("1").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_2_copy = result_2.copy()
+        result_3 = MathTex("1").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_3_copy = result_3.copy()
+        result_4 = MathTex("5").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_4_copy = result_4.copy()
+        result_5 = MathTex("0").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_5_copy = result_5.copy()
+        result_6 = MathTex("3").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
+        result_6_copy = result_6.copy()
+
+        self.play(Succession(Write(NameA), Write(matrix0), run_time = 4))
+        self.play(Succession(Write(NameB), Write(matrix1), run_time=4))
+        self.play(Succession(Write(NameAB), Write(matrix_outline), run_time=4))
+
+        self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  first_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Create(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  fourth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Create(Multi2), Create(Plus1),  
+                  run_time=2)
+        
+        self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  seventh_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Create(Multi3), Create(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_1),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_1_copy.animate.shift(RIGHT * 3.8 + DOWN * 1.15),
+                  FadeOut(Multi1, Multi2, Multi3, result_1, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, first_element2, fourth_element2, seventh_element2),
+                  run_time=2
+                  )
+        
+#break
+        first_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*1.625)
+        second_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*2.61)
+        third_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*3.523)
+#break
+
+        self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  second_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Write(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  fifth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Write(Multi2), Write(Plus1),  
+                  run_time=2)
+        
+        self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  eigth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Write(Multi3), Write(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_2),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_2_copy.animate.shift(RIGHT * 4.7 + DOWN * 1.15),
+                  FadeOut(Multi1, Multi2, Multi3, result_2, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, second_element2, fifth_element2, eigth_element2),
+                  run_time=2
+                  )
+        
+#break
+        first_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*1.625)
+        second_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*2.61)
+        third_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*3.523)
+#break
+
+        self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  third_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Write(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  sixth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Write(Multi2), Write(Plus1),  
+                  run_time=2)
+        
+        self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  ninth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Write(Multi3), Write(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_3),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_3_copy.animate.shift(RIGHT * 5.6 + DOWN * 1.15),
+                  FadeOut(Multi1, Multi2, Multi3, result_3, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, third_element2, sixth_element2, ninth_element2),
+                  run_time=3
+                  )
+        
+        ######################################
+        first_element2.shift(DOWN*0.8 + RIGHT*2.15)
+        second_element2.shift(DOWN*0.8 + RIGHT*3)
+        third_element2.shift(DOWN*0.8 + RIGHT*3.95)
+        fourth_element2.shift(DOWN*1.375 + RIGHT*1.2)
+        fifth_element2.shift(DOWN*1.375 + RIGHT*2)
+        sixth_element2.shift(DOWN*1.375 + RIGHT*2.95)
+        seventh_element2.shift(DOWN*1.9 + RIGHT*0.17)
+        eigth_element2.shift(DOWN*1.9 + RIGHT*1.05)
+        ninth_element2.shift(DOWN*1.9 + RIGHT*1.95)
+        ######################################
+
+        self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  first_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Create(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  fourth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Create(Multi2), Create(Plus1),  
+                  run_time=2)
+        
+        self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  seventh_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Create(Multi3), Create(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_4),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_4_copy.animate.shift(RIGHT * 3.8 + DOWN * 1.65),
+                  FadeOut(Multi1, Multi2, Multi3, result_4, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, first_element2, fourth_element2, seventh_element2),
+                  run_time=2
+                  )
+        
+#break
+        fourth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*1.625)
+        fifth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*2.61)
+        sixth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*3.523)
+#break
+
+        self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  second_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Write(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  fifth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Write(Multi2), Write(Plus1),  
+                  run_time=2)
+        
+        self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  eigth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Write(Multi3), Write(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_5),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_5_copy.animate.shift(RIGHT * 4.7 + DOWN * 1.65),
+                  FadeOut(Multi1, Multi2, Multi3, result_5, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, second_element2, fifth_element2, eigth_element2),
+                  run_time=2
+                  )
+        
+#break
+        fourth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*1.625)
+        fifth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*2.61)
+        sixth_element_copy.to_corner(UL).shift(DOWN*3.62 + RIGHT*3.523)
+#break
+
+        self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
+                  third_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  Write(Multi1), 
+                  run_time=2, 
+                  )
+        
+        self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
+                  sixth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
+                  Write(Multi2), Write(Plus1),  
+                  run_time=2)
+        
+        self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
+                  ninth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
+                  Write(Multi3), Write(Plus2),  
+                  run_time=2)
+        
+        self.play(Succession(Create(Equal), 
+                  Write(result_6),
+                  run_time=1.5
+                  ))
+        
+        self.play(result_6_copy.animate.shift(RIGHT * 5.6 + DOWN * 1.65),
+                  FadeOut(Multi1, Multi2, Multi3, result_6, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, third_element2, sixth_element2, ninth_element2),
+                  run_time=3
+                  )
