@@ -21,12 +21,12 @@ class Video1(Scene):
         fifth_element = VGroup(matrix0_elements[4])
         sixth_element = VGroup(matrix0_elements[5])
 
-        first_element_copy = first_element.copy()
-        second_element_copy = second_element.copy()
-        third_element_copy = third_element.copy()
-        fourth_element_copy = fourth_element.copy()
-        fifth_element_copy = fifth_element.copy()
-        sixth_element_copy = sixth_element.copy()
+        first_element_copy = first_element.copy().set_color(RED)
+        second_element_copy = second_element.copy().set_color(YELLOW)
+        third_element_copy = third_element.copy().set_color(BLUE_D)
+        fourth_element_copy = fourth_element.copy().set_color(RED)
+        fifth_element_copy = fifth_element.copy().set_color(YELLOW)
+        sixth_element_copy = sixth_element.copy().set_color(BLUE_D)
 
         matrix1= Matrix([
             [ 2, 0, 1],
@@ -34,20 +34,32 @@ class Video1(Scene):
             [ 1, 1, 0]
              ]).scale(0.7)
         
+        matrix1_elements = matrix1.get_entries()
+
+        first_element02 = VGroup(matrix1_elements[0])
+        second_element02 = VGroup(matrix1_elements[1])
+        third_element02 = VGroup(matrix1_elements[2])
+        fourth_element02 = VGroup(matrix1_elements[3])
+        fifth_element02 = VGroup(matrix1_elements[4])
+        sixth_element02 = VGroup(matrix1_elements[5])
+        seventh_element02 = VGroup(matrix1_elements[6])
+        eigth_element02 = VGroup(matrix1_elements[7])
+        ninth_element02 = VGroup(matrix1_elements[8])
+
         matrix1_copy = matrix1.copy()
         matrix1_copy_elements = matrix1_copy.get_entries()
 
         NameB = MathTex("B =").next_to(matrix1, LEFT).scale(0.7)
         
-        first_element2 = VGroup(matrix1_copy_elements[0])
-        second_element2 = VGroup(matrix1_copy_elements[1])
-        third_element2 = VGroup(matrix1_copy_elements[2])
-        fourth_element2 = VGroup(matrix1_copy_elements[3])
-        fifth_element2 = VGroup(matrix1_copy_elements[4])
-        sixth_element2 = VGroup(matrix1_copy_elements[5])
-        seventh_element2 = VGroup(matrix1_copy_elements[6])
-        eigth_element2 = VGroup(matrix1_copy_elements[7])
-        ninth_element2 = VGroup(matrix1_copy_elements[8])
+        first_element2 = VGroup(matrix1_copy_elements[0]).set_color(RED)
+        second_element2 = VGroup(matrix1_copy_elements[1]).set_color(RED)
+        third_element2 = VGroup(matrix1_copy_elements[2]).set_color(RED)
+        fourth_element2 = VGroup(matrix1_copy_elements[3]).set_color(YELLOW)
+        fifth_element2 = VGroup(matrix1_copy_elements[4]).set_color(YELLOW)
+        sixth_element2 = VGroup(matrix1_copy_elements[5]).set_color(YELLOW)
+        seventh_element2 = VGroup(matrix1_copy_elements[6]).set_color(BLUE_D)
+        eigth_element2 = VGroup(matrix1_copy_elements[7]).set_color(BLUE_D)
+        ninth_element2 = VGroup(matrix1_copy_elements[8]).set_color(BLUE_D)
 
         matrix2= Matrix([
             [ 3, 1, 1],
@@ -88,18 +100,24 @@ class Video1(Scene):
 
         self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   first_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
+                  first_element.animate.set_color(RED),
+                  first_element02.animate.set_color(RED),
                   Create(Multi1), 
                   run_time=2, 
                   )
         
         self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   fourth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
-                  Create(Multi2), Create(Plus1),  
+                  Create(Multi2), Create(Plus1), 
+                  second_element.animate.set_color(YELLOW),
+                  fourth_element02.animate.set_color(YELLOW), 
                   run_time=2)
         
         self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   seventh_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
                   Create(Multi3), Create(Plus2),  
+                  third_element.animate.set_color(BLUE_D),
+                  seventh_element02.animate.set_color(BLUE_D), 
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -109,8 +127,18 @@ class Video1(Scene):
         
         self.play(result_1_copy.animate.shift(RIGHT * 3.8 + DOWN * 1.15),
                   FadeOut(Multi1, Multi2, Multi3, result_1, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, first_element2, fourth_element2, seventh_element2),
-                  run_time=2
+
+                first_element.animate.set_color(WHITE),
+                first_element02.animate.set_color(WHITE),
+                second_element.animate.set_color(WHITE),
+                fourth_element02.animate.set_color(WHITE), 
+                third_element.animate.set_color(WHITE),
+                seventh_element02.animate.set_color(WHITE), 
+
+                run_time=2,
                   )
+
+
         
 #break
         first_element_copy.to_corner(UL).shift(DOWN*3.12 + RIGHT*1.625)
@@ -121,17 +149,23 @@ class Video1(Scene):
         self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   second_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
                   Write(Multi1), 
+                  first_element.animate.set_color(RED),
+                  second_element02.animate.set_color(RED),
                   run_time=2, 
                   )
         
         self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   fifth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
-                  Write(Multi2), Write(Plus1),  
+                  Write(Multi2), Write(Plus1),
+                  second_element.animate.set_color(YELLOW),
+                  fifth_element02.animate.set_color(YELLOW),   
                   run_time=2)
         
         self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   eigth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
-                  Write(Multi3), Write(Plus2),  
+                  Write(Multi3), Write(Plus2), 
+                  third_element.animate.set_color(BLUE_D),
+                  eigth_element02.animate.set_color(BLUE_D),  
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -141,6 +175,14 @@ class Video1(Scene):
         
         self.play(result_2_copy.animate.shift(RIGHT * 4.7 + DOWN * 1.15),
                   FadeOut(Multi1, Multi2, Multi3, result_2, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, second_element2, fifth_element2, eigth_element2),
+                  
+                first_element.animate.set_color(WHITE),
+                second_element02.animate.set_color(WHITE),
+                second_element.animate.set_color(WHITE),
+                fifth_element02.animate.set_color(WHITE), 
+                third_element.animate.set_color(WHITE),
+                eigth_element02.animate.set_color(WHITE), 
+
                   run_time=2
                   )
         
@@ -152,18 +194,24 @@ class Video1(Scene):
 
         self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   third_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
-                  Write(Multi1), 
+                  Write(Multi1),
+                  first_element.animate.set_color(RED),
+                  third_element02.animate.set_color(RED), 
                   run_time=2, 
                   )
         
         self.play(second_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   sixth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
-                  Write(Multi2), Write(Plus1),  
+                  Write(Multi2), Write(Plus1), 
+                  second_element.animate.set_color(YELLOW),
+                  sixth_element02.animate.set_color(YELLOW), 
                   run_time=2)
         
         self.play(third_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   ninth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
-                  Write(Multi3), Write(Plus2),  
+                  Write(Multi3), Write(Plus2), 
+                  third_element.animate.set_color(BLUE_D),
+                  ninth_element02.animate.set_color(BLUE_D), 
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -173,6 +221,14 @@ class Video1(Scene):
         
         self.play(result_3_copy.animate.shift(RIGHT * 5.6 + DOWN * 1.15),
                   FadeOut(Multi1, Multi2, Multi3, result_3, Plus1, Plus2, Equal, first_element_copy, second_element_copy, third_element_copy, third_element2, sixth_element2, ninth_element2),
+                  
+                first_element.animate.set_color(WHITE),
+                third_element02.animate.set_color(WHITE),
+                second_element.animate.set_color(WHITE),
+                sixth_element02.animate.set_color(WHITE), 
+                third_element.animate.set_color(WHITE),
+                ninth_element02.animate.set_color(WHITE),
+
                   run_time=3
                   )
         
@@ -191,17 +247,23 @@ class Video1(Scene):
         self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   first_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
                   Create(Multi1), 
+                  fourth_element.animate.set_color(RED),
+                  first_element02.animate.set_color(RED),
                   run_time=2, 
                   )
         
         self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   fourth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
                   Create(Multi2), Create(Plus1),  
+                  fifth_element.animate.set_color(YELLOW),
+                  fourth_element02.animate.set_color(YELLOW),
                   run_time=2)
         
         self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   seventh_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
                   Create(Multi3), Create(Plus2),  
+                  sixth_element.animate.set_color(BLUE_D),
+                  seventh_element02.animate.set_color(BLUE_D), 
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -211,6 +273,14 @@ class Video1(Scene):
         
         self.play(result_4_copy.animate.shift(RIGHT * 3.8 + DOWN * 1.65),
                   FadeOut(Multi1, Multi2, Multi3, result_4, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, first_element2, fourth_element2, seventh_element2),
+                  
+                fourth_element.animate.set_color(WHITE),
+                first_element02.animate.set_color(WHITE),
+                fifth_element.animate.set_color(WHITE),
+                fourth_element02.animate.set_color(WHITE), 
+                sixth_element.animate.set_color(WHITE),
+                seventh_element02.animate.set_color(WHITE), 
+                  
                   run_time=2
                   )
         
@@ -222,18 +292,24 @@ class Video1(Scene):
 
         self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   second_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
-                  Write(Multi1), 
+                  Write(Multi1),
+                  fourth_element.animate.set_color(RED),
+                  second_element02.animate.set_color(RED), 
                   run_time=2, 
                   )
         
         self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   fifth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
                   Write(Multi2), Write(Plus1),  
+                  fifth_element.animate.set_color(YELLOW),
+                  fifth_element02.animate.set_color(YELLOW), 
                   run_time=2)
         
         self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   eigth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
-                  Write(Multi3), Write(Plus2),  
+                  Write(Multi3), Write(Plus2), 
+                  sixth_element.animate.set_color(BLUE_D),
+                  eigth_element02.animate.set_color(BLUE_D),  
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -243,6 +319,15 @@ class Video1(Scene):
         
         self.play(result_5_copy.animate.shift(RIGHT * 4.7 + DOWN * 1.65),
                   FadeOut(Multi1, Multi2, Multi3, result_5, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, second_element2, fifth_element2, eigth_element2),
+                  
+                fourth_element.animate.set_color(WHITE),
+                second_element02.animate.set_color(WHITE),
+                fifth_element.animate.set_color(WHITE),
+                fifth_element02.animate.set_color(WHITE), 
+                sixth_element.animate.set_color(WHITE),
+                eigth_element02.animate.set_color(WHITE), 
+                  
+                  
                   run_time=2
                   )
         
@@ -255,17 +340,23 @@ class Video1(Scene):
         self.play(fourth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   third_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
                   Write(Multi1), 
+                  fourth_element.animate.set_color(RED),
+                  third_element02.animate.set_color(RED),
                   run_time=2, 
                   )
         
         self.play(fifth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4), 
                   sixth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*4.5),
-                  Write(Multi2), Write(Plus1),  
+                  Write(Multi2), Write(Plus1), 
+                  fifth_element.animate.set_color(YELLOW),
+                  sixth_element02.animate.set_color(YELLOW), 
                   run_time=2)
         
         self.play(sixth_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5), 
                   ninth_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*5.5), 
                   Write(Multi3), Write(Plus2),  
+                  sixth_element.animate.set_color(BLUE_D),
+                  ninth_element02.animate.set_color(BLUE_D), 
                   run_time=2)
         
         self.play(Succession(Create(Equal), 
@@ -275,5 +366,13 @@ class Video1(Scene):
         
         self.play(result_6_copy.animate.shift(RIGHT * 5.6 + DOWN * 1.65),
                   FadeOut(Multi1, Multi2, Multi3, result_6, Plus1, Plus2, Equal, fourth_element_copy, fifth_element_copy, sixth_element_copy, third_element2, sixth_element2, ninth_element2),
+                  
+                fourth_element.animate.set_color(WHITE),
+                third_element02.animate.set_color(WHITE),
+                fifth_element.animate.set_color(WHITE),
+                sixth_element02.animate.set_color(WHITE), 
+                sixth_element.animate.set_color(WHITE),
+                ninth_element02.animate.set_color(WHITE), 
+                  
                   run_time=3
                   )
