@@ -1,0 +1,34 @@
+from manim import *
+
+class Video(Scene):
+    def construct(self):
+
+        Equation = Tex("A $\\cdot$ B = C").scale(1.75)
+
+        Brace_1 = Brace(Equation, DOWN).shift(LEFT*1.7).scale(0.2).set_stroke(width=2)
+        Brace_1_Text = Tex(r"(l x m)", color=ORANGE).next_to(Brace_1,DOWN*0.25).scale(0.8)
+        
+        Brace_2 = Brace(Equation, DOWN).scale(0.2).shift(LEFT*0.15).set_stroke(width=2)
+        Brace_2_Text = Tex(r"(m x s)", color=ORANGE).next_to(Brace_2,DOWN*0.25).scale(0.8)
+        
+        arrow1 = Tex("$\\uparrow$").scale(1.75).shift(LEFT*1.45)
+        arrow2 = Tex("$\\uparrow$").scale(1.75).shift(RIGHT*-0.45)
+
+        start_point = LEFT * 1.4
+        end_point = RIGHT * -0.45
+        line1 = Line(start_point, end_point)
+        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42)
+        symbol1.rotate(180 * DEGREES)
+        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42)
+        symbol2.rotate(180 * DEGREES)
+        connection1 = VGroup(symbol1, symbol2, line1).shift(DOWN*1.5)
+        Haken = Tex(r"$\checkmark$").next_to(connection1, DOWN).set_color(GREEN_D)  
+
+        self.play(Write(Equation), run_time=2)
+        self.play(Write(Brace_1), Write(Brace_1_Text), run_time=1.25)
+        self.play(Write(Brace_2), Write(Brace_2_Text), run_time=1.25)
+        self.wait(2)
+        self.play(FadeIn(connection1))
+        self.wait(0.5)
+        self.play(FadeIn(Haken))
+        self.wait(2)
