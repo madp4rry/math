@@ -7,6 +7,9 @@ class Video1(Scene):
             [ 1, 0, 1],
             [ 2, 1, 0]
              ]).shift(LEFT*4).scale(0.7)
+        M_Brace0 = Brace(matrix0, DOWN)
+        M_Brace0_Text = Tex(r"(2x3)", color=ORANGE).next_to(M_Brace0,DOWN)
+
        
         matrix0_elements = matrix0.get_entries()
         
@@ -33,6 +36,10 @@ class Video1(Scene):
             [ 1, 0, 1],
             [ 1, 1, 0]
              ]).scale(0.7)
+        
+        M_Brace1 = Brace(matrix1, DOWN)
+        M_Brace1_Text = Tex(r"(3x3)", color=ORANGE).next_to(M_Brace1,DOWN).shift(UP*0.3)
+
         
         matrix1_elements = matrix1.get_entries()
 
@@ -71,7 +78,9 @@ class Video1(Scene):
         left_bracket = Tex(r"\left[").scale(3).stretch_to_fit_height(4).shift(RIGHT * 0.8)
         right_bracket = Tex(r"\right]").scale(3).stretch_to_fit_height(4).shift(RIGHT * 9)
         matrix_outline = VGroup(left_bracket, right_bracket).scale(0.3)
-
+        
+        M_Brace2 = Brace(matrix_outline, DOWN)
+        M_Brace2_Text = Tex(r"(3x3)", color=ORANGE).next_to(M_Brace2,DOWN).shift(LEFT*0.6)
         matrix_outline.next_to(NameAB)
 
         Plus1 = MathTex("+").to_corner(UL).shift(DOWN*1.95 + RIGHT*3.65).scale(0.5)
@@ -81,6 +90,18 @@ class Video1(Scene):
         Multi3 = MathTex("\\cdot").to_corner(UL).shift(DOWN*2.1 + RIGHT*5.3)
         Equal = MathTex("=").to_corner(UL).shift(DOWN*2.05 + RIGHT*5.7).scale(0.5)
         
+        start_point = LEFT * 3.75
+        end_point = RIGHT * -0.2
+        line1 = Line(start_point, end_point)
+        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42)
+        symbol1.rotate(180 * DEGREES)
+        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42)
+        symbol2.rotate(180 * DEGREES)
+
+        connection1 = VGroup(symbol1, symbol2, line1).shift(DOWN*2.15)
+        Haken = Tex(r"$\checkmark$").next_to(connection1, DOWN).set_color(GREEN_D)
+
+
         result_1 = MathTex("3").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
         result_1_copy = result_1.copy()
         result_2 = MathTex("1").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
@@ -96,7 +117,13 @@ class Video1(Scene):
 
         self.play(Succession(Write(NameA), Write(matrix0), run_time = 4))
         self.play(Succession(Write(NameB), Write(matrix1), run_time=4))
+        self.play(Write(M_Brace0_Text))
+        self.play(Write(M_Brace1_Text))
+        self.play(FadeIn(connection1))
+        self.play(FadeIn(Haken))
         self.play(Succession(Write(NameAB), Write(matrix_outline), run_time=4))
+        self.play(FadeOut(connection1), FadeOut(Haken))
+        
 
         self.play(first_element_copy.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3), 
                   first_element2.animate.to_corner(UL).shift(DOWN*2 + RIGHT*3.5),
@@ -376,3 +403,8 @@ class Video1(Scene):
                   
                   run_time=3
                   )
+        
+        self.play(Succession(
+                  Write(M_Brace2_Text),
+                  run_time=2))
+       
