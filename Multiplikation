@@ -1,6 +1,6 @@
 from manim import *
 
-class Video1(Scene):
+class Video(Scene):
     def construct(self):
 
         matrix0= Matrix([
@@ -8,7 +8,7 @@ class Video1(Scene):
             [ 2, 1, 0]
              ]).shift(LEFT*4).scale(0.7)
         M_Brace0 = Brace(matrix0, DOWN)
-        M_Brace0_Text = Tex(r"(2x3)", color=ORANGE).next_to(M_Brace0,DOWN)
+        M_Brace0_Text = Tex(r"(2x3)", color=WHITE).next_to(M_Brace0,DOWN)
 
        
         matrix0_elements = matrix0.get_entries()
@@ -38,7 +38,7 @@ class Video1(Scene):
              ]).scale(0.7)
         
         M_Brace1 = Brace(matrix1, DOWN)
-        M_Brace1_Text = Tex(r"(3x3)", color=ORANGE).next_to(M_Brace1,DOWN).shift(UP*0.3)
+        M_Brace1_Text = Tex(r"(3x3)", color=WHITE).next_to(M_Brace1,DOWN).shift(UP*0.3)
 
         
         matrix1_elements = matrix1.get_entries()
@@ -80,7 +80,7 @@ class Video1(Scene):
         matrix_outline = VGroup(left_bracket, right_bracket).scale(0.3)
         
         M_Brace2 = Brace(matrix_outline, DOWN)
-        M_Brace2_Text = Tex(r"(3x3)", color=ORANGE).next_to(M_Brace2,DOWN).shift(LEFT*0.6)
+        M_Brace2_Text = Tex(r"(2x3)", color=BLUE_D).next_to(M_Brace2,DOWN).shift(LEFT*0.6)
         matrix_outline.next_to(NameAB)
 
         Plus1 = MathTex("+").to_corner(UL).shift(DOWN*1.95 + RIGHT*3.65).scale(0.5)
@@ -93,13 +93,22 @@ class Video1(Scene):
         start_point = LEFT * 3.75
         end_point = RIGHT * -0.2
         line1 = Line(start_point, end_point)
-        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42)
+        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
         symbol1.rotate(180 * DEGREES)
-        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42)
+        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
         symbol2.rotate(180 * DEGREES)
 
         connection1 = VGroup(symbol1, symbol2, line1).shift(DOWN*2.15)
         Haken = Tex(r"$\checkmark$").next_to(connection1, DOWN).set_color(GREEN_D)
+
+        start_point1 = LEFT * 4.25
+        end_point1 = RIGHT * 0.25
+        line2 = Line(start_point1, end_point1)
+        symbol3 = Tex(r"$\perp$").next_to(start_point1).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
+        symbol3.rotate(180 * DEGREES)
+        symbol4 = Tex(r"$\perp$").next_to(end_point1).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
+        symbol4.rotate(180 * DEGREES)
+        connection2 = VGroup(symbol3, symbol4, line2).shift(DOWN*2.15).set_color(BLUE_D)
 
 
         result_1 = MathTex("3").to_corner(UL).shift(DOWN*1.95 + RIGHT*6.1).scale(0.7)
@@ -404,7 +413,8 @@ class Video1(Scene):
                   run_time=3
                   )
         
-        self.play(Succession(
+        self.play(
+                  FadeIn(connection2),
                   Write(M_Brace2_Text),
-                  run_time=2))
+                  run_time=2)
        
