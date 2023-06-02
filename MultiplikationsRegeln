@@ -6,29 +6,57 @@ class Video(Scene):
         Equation = Tex("A $\\cdot$ B = C").scale(1.75)
 
         Brace_1 = Brace(Equation, DOWN).shift(LEFT*1.7).scale(0.2).set_stroke(width=2)
-        Brace_1_Text = Tex(r"(l x m)", color=ORANGE).next_to(Brace_1,DOWN*0.25).scale(0.8)
+        Brace_1_Text = Tex(r"(n x m)", color=ORANGE).next_to(Brace_1,DOWN*0.25).scale(0.7)
         
         Brace_2 = Brace(Equation, DOWN).scale(0.2).shift(LEFT*0.15).set_stroke(width=2)
-        Brace_2_Text = Tex(r"(m x s)", color=ORANGE).next_to(Brace_2,DOWN*0.25).scale(0.8)
+        Brace_2_Text = Tex(r"(m x l)", color=ORANGE).next_to(Brace_2,DOWN*0.25).scale(0.7)
         
-        arrow1 = Tex("$\\uparrow$").scale(1.75).shift(LEFT*1.45)
-        arrow2 = Tex("$\\uparrow$").scale(1.75).shift(RIGHT*-0.45)
+        arrow = Tex("$\\Rightarrow$").scale(1.15).shift(RIGHT*0.8 + DOWN*1)
+        
+ 
+        Brace_3 = Brace(Equation, DOWN).scale(0.2).shift(RIGHT*1.7).set_stroke(width=2)
+        Brace_3_Text = Tex(r"(n x l)", color=ORANGE).next_to(Brace_3,DOWN*0.25).scale(0.7)
+        
 
         start_point = LEFT * 1.4
-        end_point = RIGHT * -0.45
+        end_point = RIGHT * -0.42
         line1 = Line(start_point, end_point)
-        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42)
+        symbol1 = Tex(r"$\perp$").next_to(start_point).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
         symbol1.rotate(180 * DEGREES)
-        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42)
+        symbol2 = Tex(r"$\perp$").next_to(end_point).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
         symbol2.rotate(180 * DEGREES)
         connection1 = VGroup(symbol1, symbol2, line1).shift(DOWN*1.5)
         Haken = Tex(r"$\checkmark$").next_to(connection1, DOWN).set_color(GREEN_D)  
 
+        start_point2 = LEFT * 2.05
+        end_point2 = RIGHT * 0.215
+        line2 = Line(start_point2, end_point2)
+        symbol4 = Tex(r"$\perp$").next_to(start_point2).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
+        symbol4.rotate(180 * DEGREES)
+        symbol5 = Tex(r"$\perp$").next_to(end_point2).shift(UP*0.15, LEFT*0.42).set_stroke(width=1.4)
+        symbol5.rotate(180 * DEGREES)
+        connection2 = VGroup(symbol4, symbol5, line2).shift(DOWN*1.5)
+
+        Group = VGroup(Equation, Brace_1, Brace_2, Brace_3, Brace_1_Text, Brace_2_Text, Brace_3_Text)  
+
+        Formel1 = Tex(r"\[ C_{ki} =\sum_{j=1}^m b_{kj}a_{ji} \]").shift(RIGHT*3)
+        Formel2= Tex(r"für alle 1$\leq$ i$\leq$ l und 1$\leq$ k$\leq$ n").scale(0.7).next_to(Formel1, DOWN)
+
         self.play(Write(Equation), run_time=2)
         self.play(Write(Brace_1), Write(Brace_1_Text), run_time=1.25)
         self.play(Write(Brace_2), Write(Brace_2_Text), run_time=1.25)
-        self.wait(2)
-        self.play(FadeIn(connection1))
+        self.wait(1)
+        self.play(FadeIn(connection1), run_time=1.5)
         self.wait(0.5)
-        self.play(FadeIn(Haken))
+        self.play(Write(Haken))
         self.wait(2)
+        self.play(FadeOut(connection1, Haken))
+        self.wait(1)
+        self.play(FadeIn(connection2), run_time=1.5)
+        self.play(Write(arrow))
+        self.play(Write(Brace_3), Write(Brace_3_Text), run_time=1.25)
+        self.wait(2)
+        self.play(FadeOut(connection2, arrow))
+        self.play(Group.animate.shift(LEFT*3))
+        self.wait(1)
+        self.play(Succession(Write(Formel1), Write(Formel2)), run_time=3)
