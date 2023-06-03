@@ -1,121 +1,109 @@
 from manim import *
 
-class Video1(Scene):
+class Video(Scene):
     def construct(self):
-        config.tex_template = TexTemplate(compiler="cairo")
 
-        equations = VGroup(
-            Tex(r"$a_{11}x_1 + a_{12}x_2 + \vdots + a_{1m}x_m = b_1$"),
-            Tex(r"$a_{21}x_1 + a_{22}x_2 + \vdots + a_{2m}x_m = b_2$"),
-            Tex(r"$\vdots + \vdots + \vdots + \vdots = \vdots$"),
-            Tex(r"$a_{n1}x_1 + a_{n2}x_2 + \vdots + a_{nm}x_m = b_n$"),
-        ).scale(0.7)
-        equations.arrange(DOWN)
+        a_11 = Tex("$a_{11}$")
+        x_1 = Tex("$x$").next_to(a_11, buff=0)
+        plus_1 = Tex("$+$").next_to(x_1)
+        a_12 = Tex("$a_{12}$}").next_to(plus_1)
+        x_2 = Tex("$x$").next_to(a_12, buff=0)
+        plus_12 = Tex("$+$").next_to(x_2)
+        dots_1 = Tex("$\\dots$").next_to(plus_12)
+        plus_2 = Tex("$+$").next_to(dots_1)
+        a_13 = Tex("$a_{1m}$").next_to(plus_2)
+        x_3 = Tex("$x$").next_to(a_13, buff=0)
+        equal_1 = Tex("$=$").next_to(x_3)
+        b_1 = Tex("$b_{1}$").next_to(equal_1)
 
+        equation1 = VGroup(a_11, x_1, plus_1, a_12, x_2, plus_12, dots_1, plus_2, a_13, x_3, equal_1, b_1).shift(LEFT*3 + UP*1)
+
+        a_21 = Tex("$a_{21}$")
+        x_4 = Tex("$x$").next_to(a_21, buff=0)
+        plus_3 = Tex("$+$").next_to(x_4)
+        a_22 = Tex("$a_{22}$").next_to(plus_3)
+        x_5 = Tex("$x$").next_to(a_22, buff=0)
+        plus_32 = Tex("+").next_to(x_5)
+        dots_2 = Tex("$\\dots$").next_to(plus_32)
+        plus_4 = Tex("$+$").next_to(dots_2)
+        a_23 = Tex("$a_{2m}$").next_to(plus_4)
+        x_6 = Tex("$x$").next_to(a_23, buff=0)
+        equal_2 = Tex("=").next_to(x_6)
+        b_2 = Tex("$b_2$").next_to(equal_2)
+
+        equation2 = VGroup(a_21, x_4, plus_3, a_22, x_5, plus_32, dots_2, plus_4, a_23, x_6, equal_2, b_2).shift(LEFT*3).next_to(equation1, DOWN)
+
+
+        a_31 = Tex("$\\vdots$").shift(LEFT*1.8)
+        plus_5 = Tex("+").shift(LEFT*0.8)
+        a_32 = Tex("$\\vdots$").shift(LEFT*0)
+        plus_52 = Tex("+").shift(LEFT*-0.9)
+        dots_3 = Tex("$\\ddots$").shift(LEFT*-1.5)
+        plus_6 = Tex("+").shift(LEFT*-2.2)
+        a_33 = Tex("$\\vdots$").shift(LEFT*-3.1)
+        equal_3 = Tex("=").shift(LEFT*-4.075)
+        b_3 = Tex("$\\vdots$").shift(LEFT*-4.6)
+
+        equation3 = VGroup(a_31, plus_5, a_32, plus_52, dots_3, plus_6, a_33, equal_3, b_3).next_to(equation2, DOWN)
+
+        a_41 = Tex("$a_{n1}$")
+        x_10 = Tex("$x$").next_to(a_41, buff=0)
+        plus_7 = Tex("$+$").next_to(x_10)
+        a_42 = Tex("$a_{n2}$").next_to(plus_7)
+        x_11 = Tex("$x$").next_to(a_42, buff=0)
+        plus_72 = Tex("$+$").next_to(x_11)
+        dots_4 = Tex("$\\dots$").next_to(plus_72)
+        plus_8 = Tex("$+$").next_to(dots_4)
+        a_43 = Tex("$a_{nm}$").next_to(plus_8)
+        x_12 = Tex("$x$").next_to(a_43, buff=0)
+        equal_4 = Tex("$=$").next_to(x_12)
+        b_4 = Tex("$b_n$").next_to(equal_4)
+
+        equation4 = VGroup(a_41, x_10, plus_7, a_42, x_11, plus_72, dots_4, plus_8, a_43, x_12, equal_4, b_4).shift(LEFT*3).next_to(equation3, DOWN)
+
+        constants = VGroup(b_1, b_2, b_4)
+        Konstanten_Text = Text("Konstanten", color=YELLOW).shift(UP * 2).scale(0.75)
+        coefficients = VGroup(a_11, a_12, a_13, a_21, a_22, a_23, a_41, a_42, a_43)
+        Koeffizienten_Text = Text("Koeffizienten", color=BLUE_D).shift(UP * 2).scale(0.75)
+        variables = VGroup(x_1, x_2, x_3, x_4, x_5, x_6, x_10, x_11, x_12)
+        Variablen_Text = Text("Variablen", color=RED_D).shift(UP * 2).scale(0.75)
         
-        first_equation = equations[0][0]
-        second_equation = equations[1][0]
-        third_equation = equations[2][0]  
-        fourth_equation = equations[3][0] 
+        all_equations = VGroup(equation1, equation2, equation3, equation4)
 
-        m_a_11 = first_equation[0: 3]
-        m_a_12 = first_equation[6: 9]
-        m_a_d1 = first_equation[12: 15]
-        m_a_1m = first_equation[16: 19]
-        m_b_1 = first_equation[22: 25]
-        m_x_11 = first_equation[3:5]
-        m_x_12 = first_equation[9:11]
-        m_x_1m = first_equation[19:21]
-
-        m_a_21 = second_equation[0: 3]
-        m_a_22 = second_equation[6: 9]
-        m_a_d2 = second_equation[12: 15]
-        m_a_2m = second_equation[16: 19]
-        m_b_2 = second_equation[22: 25]
-        m_x_21 = second_equation[3:5]
-        m_x_22 = second_equation[9:11]
-        m_x_2m = second_equation[19:21]
-    
-        m_d_1 = third_equation[0:3]
-        m_d_2 = third_equation[4:7]
-        m_d_3 = third_equation[8:11]
-        m_d_4 = third_equation[12:15]
-        m_d_5 = third_equation[16:19]
+        left_bracket = Tex(r"\left[").scale(1).stretch_to_fit_height(2).shift(LEFT * -0.5)
+        right_bracket = Tex(r"\right]").scale(1).stretch_to_fit_height(2).shift(RIGHT * 5.75)
+        vertical_line = Line(3 * UP, 3 * DOWN).scale(0.3).next_to(right_bracket, LEFT * 2.75).set_stroke_width(1.5)
+        matrix_outline = VGroup(left_bracket, right_bracket, vertical_line).shift(RIGHT * 0.5)
         
-        m_a_41 = fourth_equation[0: 3]
-        m_a_42 = fourth_equation[6: 9]
-        m_a_d4 = fourth_equation[12: 15]
-        m_a_4m = fourth_equation[16: 19]
-        m_b_4 = fourth_equation[22: 25]
-        m_x_41 = fourth_equation[3:5]
-        m_x_42 = fourth_equation[9:11]
-        m_x_4m = fourth_equation[19:21]
-
-        copy_b_4 = fourth_equation[22: 25].copy()
-        copy_a_11 = first_equation[0: 3].copy()
-        copy_a_12 = first_equation[6: 9].copy()
-        copy_a_d1 = first_equation[12: 15].copy()
-        copy_a_1m = first_equation[16: 19].copy()
-        copy_b_1 = first_equation[22: 25].copy()
-
-        copy_a_21 = second_equation[0: 3].copy()
-        copy_a_22 = second_equation[6: 9].copy()
-        copy_a_d2 = second_equation[12: 15].copy()
-        copy_a_2m = second_equation[16: 19].copy()
-        copy_b_2 = second_equation[22: 25].copy()
-       
-        copy_d_1 = third_equation[0:3].copy()
-        copy_d_2 = third_equation[4:7].copy()
-        copy_d_3 = third_equation[8:11].copy()
-        copy_d_4 = third_equation[12:15].copy()
-        copy_d_5 = third_equation[16:19].copy()
-        
-        copy_a_41 = fourth_equation[0: 3].copy()
-        copy_a_42 = fourth_equation[6: 9].copy()
-        copy_a_d4 = fourth_equation[12: 15].copy()
-        copy_a_4m = fourth_equation[16: 19].copy()
-        copy_b_4 = fourth_equation[22: 25].copy()
-
-        coefficients = VGroup(copy_a_11, copy_a_12, copy_a_d1, copy_a_1m, copy_b_1, copy_a_21, copy_a_22, copy_a_d2, copy_a_2m, copy_b_2, copy_a_41, copy_a_42, copy_a_d4, copy_a_4m, copy_b_4, copy_d_1, copy_d_2, copy_d_3, copy_d_4, copy_d_5)
-        coefficients.shift(LEFT * 2.622) 
-
-        m_coefficients = VGroup(m_a_11, m_a_21, m_a_41, m_a_12, m_a_22, m_a_42, m_a_1m, m_a_2m, m_a_4m)
-        m_constants = VGroup(m_b_1, m_b_2, m_b_4)
-        m_variables = VGroup(m_x_11, m_x_21, m_x_41, m_x_12, m_x_22, m_x_42, m_x_1m, m_x_2m, m_x_4m)
-       
-        Konstanten = Text("Konstanten", color=YELLOW).shift(UP * 2).scale(0.75)
-        Koeffizienten = Text("Koeffizienten", color=GREEN).shift(UP * 2).scale(0.75)
-        Variablen = Text("Variablen", color=RED).shift(UP * 2).scale(0.75)
-
-        vertical_line = Line(1.2 * UP, 1.2 * DOWN).scale(1.5).shift(RIGHT * 6)
-        left_bracket = Tex(r"\left[").scale(3).stretch_to_fit_height(4).shift(LEFT * 1.2)
-        right_bracket = Tex(r"\right]").scale(3).stretch_to_fit_height(4).shift(RIGHT * 7.5)
-        
-        matrix_outline = VGroup(vertical_line, left_bracket, right_bracket).scale(0.6)
-
-        self.play(Write(equations))
-        self.wait(1)
-        self.play(m_constants.animate.set_color(YELLOW), FadeIn(Konstanten))
-        self.wait(2)
-        self.play(m_constants.animate.set_color(WHITE), FadeOut(Konstanten))
-        self.wait(2)
-        self.play(m_coefficients.animate.set_color(GREEN), FadeIn(Koeffizienten))
-        self.wait(2)
-        self.play(m_coefficients.animate.set_color(WHITE), FadeOut(Koeffizienten))
-        self.wait(2)
-        self.play(m_variables.animate.set_color(RED), FadeIn(Variablen))
-        self.wait(2)
-        self.play(m_variables.animate.set_color(WHITE), FadeOut(Variablen))
-        self.wait(2)
-        self.play(equations.animate.scale(1).to_corner(LEFT*4))
-        self.wait(2)
-        self.play(FadeIn(matrix_outline), run_time=1)
-        self.wait(2)
-        self.play(coefficients.animate.scale(1).to_corner(RIGHT*3))
+        self.play(Write(equation1))
         self.wait()
+        self.play(Write(equation2))
         self.wait()
+        self.play(Write(equation3))
+        self.wait()
+        self.play(Write(equation4))
+        self.wait()
+        self.play(Write(Konstanten_Text))
+        self.play(constants.animate.set_color(YELLOW))
+        self.wait()
+        self.play(FadeOut(Konstanten_Text), constants.animate.set_color(WHITE))
+        self.wait()
+        self.play(Write(Koeffizienten_Text))
+        self.play(coefficients.animate.set_color(BLUE_D))
+        self.wait()
+        self.play(FadeOut(Koeffizienten_Text), coefficients.animate.set_color(WHITE))
+        self.wait()
+        self.play(Write(Variablen_Text))
+        self.play(variables.animate.set_color(RED_D))
+        self.wait()
+        self.play(FadeOut(Variablen_Text), variables.animate.set_color(WHITE))
+        self.wait()
+        self.play(all_equations.animate.scale(0.7).shift(LEFT*3), run_time=2)
+        self.wait()
+        self.play(Create(matrix_outline))
 
+        all_elements = VGroup(constants, coefficients, dots_1, dots_2, dots_3, dots_4, a_31, a_32, a_33, b_3)
+        all_elements_copy = all_elements.copy()
 
-        
-
-        
+        self.play(all_elements_copy.animate.shift(RIGHT*6.5), run_time=2)
+        self.wait()
