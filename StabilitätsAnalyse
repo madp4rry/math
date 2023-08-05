@@ -1,0 +1,175 @@
+from manim import *
+
+class TriangleVM(VMobject):
+    def __init__(self, color=WHITE, **kwargs):
+        super().__init__(**kwargs)
+        self.color = color
+        self.triangle = Triangle(color=self.color, fill_opacity=1).rotate(30 * DEGREES).scale(0.1)
+        self.add(self.triangle)
+
+    def update_triangle(self, coord):
+        self.triangle.move_to(coord[0], coord[1])
+
+class Video2(Scene):
+    def construct(self):
+        
+        ax = Axes(
+            x_range=(-3, 3), x_length=7, y_range=(-7, 10, 2), y_length=7, tips=False,
+            axis_config=dict(
+                stroke_color=GREY,
+                stroke_width=3,
+                numbers_to_exclude=[0]),
+                
+        )
+        ax.add_coordinates(
+            font_size=20,
+            num_decimal_places=1,
+        )
+        labels = ax.get_axis_labels(x_label='x', y_label='f(x)').set_color(GREY)
+        self.play(Write(ax, lag_ratio=0.01, run_time=2), Write(labels))
+        self.wait()
+        
+        func = ax.plot(lambda x: -2*(x+2)*(x+1)*(x-1), x_range=[-2.7, 1.4], color=WHITE)
+        self.play(Write(func), run_time=4)
+        self.wait()
+
+        k = ValueTracker(-2.65)
+        dot = always_redraw(
+            lambda: Dot(color=BLUE_D).move_to(ax.c2p(k.get_value(), func.underlying_function(k.get_value()))),
+        )
+        self.add(dot)
+
+        fx_text = (
+            Tex("f(x)= ")
+            .next_to(ax, LEFT).shift(LEFT*1.2+DOWN*0.25)
+            .set_color(WHITE)
+        )
+        self.play(Create(fx_text))
+        self.wait()
+
+        fx_value = DecimalNumber(num_decimal_places=2)
+
+        def update_fx_value(obj):
+            value = func.underlying_function(k.get_value())
+            obj.set_value(value)
+            if value > 0.0:
+                obj.set_color(GREEN_D).next_to(fx_text, RIGHT, buff=0.2)
+            elif value == 0:
+                obj.set_color(WHITE).next_to(fx_text, RIGHT, buff=0.2)
+            else:
+                obj.set_color(RED_D).next_to(fx_text, RIGHT, buff=0)
+
+        fx_value.add_updater(update_fx_value)
+        self.add(fx_value)
+
+        GText = Tex("Ableitung positiv $\widehat{=}$ Funktion steigend").set_color(GREEN_D).shift(UP*3 + RIGHT*4).scale(0.5)
+        
+        triangle_coordinates = [(-2.8, 0), (-2.5, 0), (-2.2, 0)]
+        triangles = [TriangleVM(color=GREEN_D).move_to(ax.coords_to_point(coord[0], coord[1])) for coord in triangle_coordinates]
+        self.play(
+            k.animate.set_value(-2),
+            Succession(*[Create(triangle) for triangle in triangles]),
+            Write(GText), 
+            run_time=4
+        )
+        self.wait()
+
+        dot1 = Dot(color=BLUE).move_to(ax.coords_to_point(-2, 0))
+        x1 = MathTex("x_1^\star").next_to(dot1, UP*3).set_color(BLUE)
+        BText = Tex("Fixpunkte / Stationäre Lösungen").set_color(BLUE).scale(0.5).next_to(GText, DOWN)
+        self.play(Write(BText))
+        dashed_line1 = DashedLine(dot1.get_center(), ax.coords_to_point(-2, 2), color=WHITE)
+        self.play(Create(dot1), Create(x1), Create(dashed_line1))
+
+        RText = Tex("Ableitung negativ $\widehat{=}$ Funktion fallend").set_color(RED_D).scale(0.5).next_to(BText, DOWN)
+        
+        triangle_coordinates2 = [(-1.8, 0), (-1.5, 0), (-1.2, 0)]
+        triangles2 = [TriangleVM(color=RED_D).rotate(-60 * DEGREES).move_to(ax.coords_to_point(coord[0], coord[1])) for coord in triangle_coordinates2]
+        self.play(
+            k.animate.set_value(-1),
+            Succession(*[Create(triangle) for triangle in triangles2]),
+            Write(RText),
+            run_time=4
+        )
+        self.wait()
+        dot2 = Dot(color=BLUE).move_to(ax.coords_to_point(-1, 0))
+        dashed_line2 = DashedLine(dot2.get_center(), ax.coords_to_point(-1, 2), color=WHITE)
+        x2 = MathTex("x_2^\star").next_to(dot2, UP*3).set_color(BLUE)
+        self.play(Create(dot2), Create(x2), Create(dashed_line2))
+
+        triangle_coordinates3 = [(-0.8, 0), (-0.4, 0), (0, 0), (0.4, 0), (0.8, 0)]
+        triangles3 = [TriangleVM(color=GREEN_D).move_to(ax.coords_to_point(coord[0], coord[1])) for coord in triangle_coordinates3]
+        self.play(
+            k.animate.set_value(1),
+            Succession(*[Create(triangle) for triangle in triangles3]),
+            run_time=4
+        )
+        self.wait()
+        dot3 = Dot(color=BLUE).move_to(ax.coords_to_point(1, 0))
+        dashed_line3 = DashedLine(dot3.get_center(), ax.coords_to_point(1, 2), color=WHITE)
+        x3 = MathTex("x_3^\star").next_to(dot3, UP*3).set_color(BLUE)
+        self.play(Create(dot3), Create(x3), Create(dashed_line3))
+
+        triangle_coordinates4 = [(1.2, 0), (1.5, 0), (1.8, 0)]
+        triangles4 = [TriangleVM(color=RED_D).rotate(-60 * DEGREES).move_to(ax.coords_to_point(coord[0], coord[1])) for coord in triangle_coordinates4]
+        self.play(
+            k.animate.set_value(1.4),
+            Succession(*[Create(triangle) for triangle in triangles4]),
+            run_time=4
+        )
+        self.wait()
+        self.play(FadeOut(fx_text), FadeOut(fx_value), FadeOut(dot))
+        self.wait()
+
+        VG = VGroup(ax, func, dot1, dot2, dot3, x1, x2, x3, *triangles, *triangles2, *triangles3, *triangles4, labels, dashed_line1, dashed_line2, dashed_line3)
+        self.play(VG.animate.shift(LEFT*3))
+        self.wait()
+        x1s = Tex("$\\rightarrow x_1^\star$: asymptotisch stabil").scale(0.75).shift(RIGHT*4)
+        x2s = Tex("$\\rightarrow x_2^\star$: instabil").scale(0.75).next_to(x1s, DOWN).shift(LEFT)
+        x3s = Tex("$\\rightarrow x_3^\star$: asymptotisch stabil").scale(0.75).next_to(x2s, DOWN).shift(RIGHT)
+        self.play(Succession(Write(x1s), Write(x2s), Write(x3s)), run_time=6)
+        
+        #x = [x1, x2, x3]
+        #x_copys=[x.copy() for x in x] 
+        #Copys = VGroup(*x_copys)
+        #self.play(Copys.animate.shift(RIGHT))
+        #self.wait()
+
+        self.play(FadeOut(x1s, x2s, x3s, RText, GText, BText, dot1, dot2, dot3, *triangles, *triangles2, *triangles3, *triangles4, func, x1, x2, x3, dashed_line1, dashed_line2, dashed_line3))
+        # ... (previous code)
+        y_labels = [-2, -1, 1]
+        x_labels = []
+        ax2 = Axes(
+            x_range=(-1, 10, 11),
+            x_length=7,
+            y_range=(-3.5, 3),
+            y_length=7,
+            tips=False,
+            axis_config=dict(
+                stroke_color=GREY,
+                stroke_width=3,
+            )
+        ).add_coordinates(None, y_labels,
+            font_size=30,
+            num_decimal_places=0,
+            )
+        
+        labels2 = ax.get_axis_labels(x_label='t', y_label='x(t)').set_color(GREY)
+        x_label = labels2[0]
+        x_label.next_to(ax2.x_axis.get_right(), RIGHT, buff=0.1)
+
+        lsg1 = MathTex("x_1^\star =").next_to(ax2.coords_to_point(0, -2), LEFT*2.8)
+        lsg2 = MathTex("x_2^\star =").next_to(ax2.coords_to_point(0, -1), LEFT*2.8)
+        lsg3 = MathTex("x_3^\star =").next_to(ax2.coords_to_point(0, 1), LEFT*2.2)
+
+        self.play(
+            ReplacementTransform(ax, ax2), ReplacementTransform(labels, labels2),
+            run_time=2
+        )
+        self.wait()
+
+        FP1 = Line(ax2.coords_to_point(0, -2), ax2.coords_to_point(10, -2), color=BLUE)
+        FP2 = DashedLine(ax2.coords_to_point(0, -1), ax2.coords_to_point(10, -1), color=BLUE)
+        FP3 = Line(ax2.coords_to_point(0, 1), ax2.coords_to_point(10, 1), color=BLUE)
+        self.play(Succession(Create(FP1), Create(lsg1), Create(FP2), Create(lsg2), Create(FP3), Create(lsg3)))
+        self.wait()
