@@ -12,7 +12,18 @@ class TriangleVM(VMobject):
 
 class Video2(Scene):
     def construct(self):
-        
+        Bsp = Tex("\\underline{Bsp:} $\\frac{d}{dt} x(t) =$").shift(LEFT*3)
+        Eq = MathTex("-2(x+2)(x+1)(x-1)").next_to(Bsp, RIGHT)
+        Brace_1 = Brace(Eq, DOWN).set_stroke(width=0.5).set_color(GREY)
+        Brace_1_Text = Tex(r"=f(x)", color=BLUE).next_to(Brace_1,DOWN*0.25)
+        self.play(Write(Bsp), Write(Eq))
+        self.wait()
+        self.play(Succession(Write(Brace_1), Write(Brace_1_Text)))
+        BspVG = VGroup(Bsp, Eq, Brace_1, Brace_1_Text)
+        self.wait(2)
+        self.play(BspVG.animate.scale(0.35).to_corner(UL), run_time=1.5)
+        self.wait()
+
         ax = Axes(
             x_range=(-3, 3), x_length=7, y_range=(-7, 10, 2), y_length=7, tips=False,
             axis_config=dict(
@@ -76,7 +87,7 @@ class Video2(Scene):
 
         dot1 = Dot(color=BLUE).move_to(ax.coords_to_point(-2, 0))
         x1 = MathTex("x_1^\star").next_to(dot1, UP*3).set_color(BLUE)
-        BText = Tex("Fixpunkte / Stationäre Lösungen").set_color(BLUE).scale(0.5).next_to(GText, DOWN)
+        BText = Tex("Fixpunkte / Stationäre Lösungen $\widehat{=}  \\frac{d}{dt} x(t) = 0$").set_color(BLUE).scale(0.5).next_to(GText, DOWN)
         self.play(Write(BText))
         dashed_line1 = DashedLine(dot1.get_center(), ax.coords_to_point(-2, 2), color=WHITE)
         self.play(Create(dot1), Create(x1), Create(dashed_line1))
@@ -135,7 +146,7 @@ class Video2(Scene):
         #self.play(Copys.animate.shift(RIGHT))
         #self.wait()
 
-        self.play(FadeOut(x1s, x2s, x3s, RText, GText, BText, dot1, dot2, dot3, *triangles, *triangles2, *triangles3, *triangles4, func, x1, x2, x3, dashed_line1, dashed_line2, dashed_line3))
+        self.play(FadeOut(x1s, x2s, x3s, RText, GText, BText, dot1, dot2, dot3, *triangles, *triangles2, *triangles3, *triangles4, func, x1, x2, x3, dashed_line1, dashed_line2, dashed_line3, BspVG))
       
         y_labels = [-2, -1, 1]
         x_labels = []
