@@ -136,7 +136,7 @@ class Video2(Scene):
         #self.wait()
 
         self.play(FadeOut(x1s, x2s, x3s, RText, GText, BText, dot1, dot2, dot3, *triangles, *triangles2, *triangles3, *triangles4, func, x1, x2, x3, dashed_line1, dashed_line2, dashed_line3))
-        # ... (previous code)
+      
         y_labels = [-2, -1, 1]
         x_labels = []
         ax2 = Axes(
@@ -173,3 +173,62 @@ class Video2(Scene):
         FP3 = Line(ax2.coords_to_point(0, 1), ax2.coords_to_point(10, 1), color=BLUE)
         self.play(Succession(Create(FP1), Create(lsg1), Create(FP2), Create(lsg2), Create(FP3), Create(lsg3)))
         self.wait()
+
+
+        asymptotic_func1 = (lambda t: -(np.exp(-0.4 * t)) -2)
+        as1 = ax2.plot(asymptotic_func1, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as1))
+        self.wait()
+
+        asymptotic_func2 = (lambda t: -1.5*(np.exp(-0.3 * t)) -2)
+        as2 = ax2.plot(asymptotic_func2, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as2))
+        self.wait()
+
+        asymptotic_func3 = lambda t: (np.exp(-0.4 * t)) + 1
+        as3 = ax2.plot(asymptotic_func3, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as3))
+        self.wait()
+
+        asymptotic_func4 = lambda t: 2*(np.exp(-0.27 * t)) + 1
+        as4 = ax2.plot(asymptotic_func4, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as4))
+        self.wait()
+
+        asymptotic_func5 = lambda t: 1.5*(np.exp(-0.3 * t)) + 1
+        as5 = ax2.plot(asymptotic_func5, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as5))
+        self.wait()
+
+        asymptotic_func6 = lambda t: 0.4*(np.exp(-0.4 * t)) - 2
+        as6 = ax2.plot(asymptotic_func6, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as6))
+        self.wait()
+
+        asymptotic_func7 = lambda t: -0.4*(np.exp(-0.4 * t)) + 1
+        as7 = ax2.plot(asymptotic_func7, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(as7))
+        self.wait()
+
+        sigmoid_func1 = lambda t: 1.2 / (1 + np.exp(-1 * (t - 5)) + 0.2)
+        sigmoid1 = ax2.plot(sigmoid_func1, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(sigmoid1))
+        self.wait()
+
+        sigmoid_func2 = lambda t: (1.3 / (1 + np.exp(-0.9 * (t - 5.2))) - 0.3)
+        sigmoid2 = ax2.plot(sigmoid_func2, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(sigmoid2))
+        self.wait()
+
+        sigmoid_func3 = lambda t: (1.8 / (1 + np.exp(-0.8 * (t - 5.5))) - 0.8)
+        sigmoid3 = ax2.plot(sigmoid_func3, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(sigmoid3))
+        self.wait()
+
+        sigmoid_func4 = lambda t: (-0.9 / (1 + np.exp(-0.8 * (t - 4))) - 1.1)
+        sigmoid4 = ax2.plot(sigmoid_func4, x_range=(0, 10)).set_stroke_width(2)
+        self.play(Create(sigmoid4))
+        self.wait()
+
+
+
