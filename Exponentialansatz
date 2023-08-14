@@ -1,0 +1,135 @@
+from manim import *
+
+class Video2(Scene):
+    def construct(self):
+        formulas = [MathTex(r"\frac{1}{2}", r"\frac{d^2x}{dt^2}", r"= - 3", r"\frac{dx}{dt}", r"- \frac{5}{2}", r"x"), 
+                    MathTex(r"\frac{1}{2}", r"\frac{d^2x}{dt^2}", r"+ 3", r"\frac{dx}{dt}", r"+ \frac{5}{2}", r"x", r"= 0"), 
+                    MathTex(r"x(t)", r"=", r"Ce^{\lambda t}"), 
+                    MathTex(r"x'(t) =", r"\frac{dx}{dt}", r"=", r"C\lambda e^{\lambda t}"), 
+                    MathTex(r"x''(t) =", r"\frac{d^2x}{dt^2}", r"=", r"C\lambda^2 e^{\lambda t}"),
+                    MathTex(r"\Leftrightarrow \frac{1}{2}", r"C\lambda^2 e^{\lambda t}", r" + 3", r"C\lambda e^{\lambda t}", r" + \frac{5}{2}", r"Ce^{\lambda t}" ,r" = 0"),
+                    MathTex(r"\Leftrightarrow Ce^{\lambda t}(\frac{1}{2}\lambda^2 + 3\lambda + \frac{5}{2}) = 0"),
+                    MathTex(r"\Rightarrow \frac{1}{2}\lambda^2 + 3\lambda + \frac{5}{2} = 0"),
+                    MathTex(r"\Leftrightarrow \lambda^2 + 6\lambda + 5 = 0"),
+                    MathTex(r"\Rightarrow \lambda_{1,2} = - 3 \pm \sqrt{(\frac{6}{2})^2 - 5"),
+                    MathTex(r"\Rightarrow \lambda_1 = -1, \lambda_2 = -5"),
+                    MathTex(r"x(t) = C_1 \cdot e^{-t} + C_2 \cdot e^{-5t}"),
+                    MathTex(r"\lambda_1 = -1, \lambda_2 = -5"),
+                    MathTex(r"x'(t) = - C_1 \cdot e^{-t} - 5C_2 \cdot e^{-5t}")
+                    ]
+        f1 = formulas[1]
+
+        f2 = formulas[2] 
+        f2[0].set_color(BLUE)
+        f2[2].set_color(BLUE)
+
+        f3 = formulas[3] 
+        f3[1].set_color(RED)
+        f3[3].set_color(RED)
+
+        f4 = formulas[4] 
+        f4[1].set_color(YELLOW)
+        f4[3].set_color(YELLOW)
+        
+        f5 = formulas[5] 
+        f5[1].set_color(YELLOW)
+        f5[3].set_color(RED)
+        f5[5].set_color(BLUE)
+            
+        for f in formulas[2:14]:
+            f.scale(0.6)
+        EA = Text("Exponentialansatz").set_color(GREEN_D).shift(UP*3.5)
+
+        self.play(Write(formulas[0]))
+        self.wait()
+        self.play(ReplacementTransform(formulas[0], formulas[1]), run_time=1.5)
+        self.wait()
+        self.play(Write(EA))
+        self.play(formulas[1].animate.scale(0.6).shift(UP*2.5+LEFT*3))  
+        self.wait()
+        
+        formulas[2].shift(RIGHT*3+UP*2.5)
+        self.play(Write(formulas[2]), run_time=2)
+        for i in range(2, 4):
+            formulas[i+1].next_to(formulas[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas[i+1]), run_time=2)
+            self.wait()
+        self.wait()
+        self.play(f1[1].animate.set_color(YELLOW), f1[3].animate.set_color(RED), f1[5].animate.set_color(BLUE))
+        self.wait()
+
+        formulas[5].next_to(formulas[1], DOWN, aligned_edge=LEFT, buff=0.3)
+        self.play(Write(formulas[5]))
+        for i in range(5, 10):
+            formulas[i+1].next_to(formulas[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas[i+1]), run_time=2)
+            self.wait()
+             
+        FadeOutGroup = VGroup(*[f for f in formulas[1:2] + formulas[3:10]])
+        self.play(FadeOut(FadeOutGroup, EA))
+        l = formulas[12].shift(UP*2.75+LEFT*5)
+        form2 = VGroup(formulas[2]).set_color(WHITE)
+        self.play(ReplacementTransform(formulas[10], l), form2.animate.shift(LEFT*5.5+UP*0.25))
+        txt = Text("Allgemeine Lösung:").shift(LEFT*5+UP*2).scale(0.6).set_color(GREEN)
+        formulas[11].next_to(txt, RIGHT, buff=0.4)
+        self.play(Succession(Write(txt), Circumscribe(l), Circumscribe(form2)))
+        self.play(Write(formulas[11]), run_time=2)
+
+        formulas2 = [MathTex(r"x(0) = 2"),
+                    MathTex(r"2 = C_1 \cdot e^{-t \cdot 0} + C_2 \cdot e^{-5 \cdot 0}"),
+                    MathTex(r"\Leftrightarrow 2 = C_1 + C_2"),
+                    MathTex(r"\Leftrightarrow", r"C_1", r"= 2 -", r"C_2"),
+                    MathTex(r"\Leftrightarrow C_1 = 2 - \frac{1}{4}"),
+                    MathTex(r"\Leftrightarrow C_1 = \frac{7}{4}"),
+                    MathTex(r"x'(0) = -3"),
+                    MathTex(r"-3 = - C_1 \cdot e^{-t \cdot 0} -  5C_2 \cdot e^{-5 \cdot 0}"),
+                    MathTex(r"\Leftrightarrow -3= - C_1 - 5 C_2"),
+                    MathTex(r"\Leftrightarrow 3 =", r"C_1", r"+ 5 C_2"),
+                    MathTex(r"\Leftrightarrow 3 = 2 - C_2 + 5 C_2"),
+                    MathTex(r"\Leftrightarrow 1 = 4 C_2"),
+                    MathTex(r"\Leftrightarrow \frac{1}{4} =", r"C_2"),
+                    MathTex(r"\frac{7}{4} e^{-t} + \frac{1}{4} e^{-3t}")
+                    ]
+        for f in formulas2: 
+            f.scale(0.6)
+
+        txt2 = Text("Spezielle Lösung:").next_to(txt, DOWN).scale(0.6).set_color(GREEN)
+        ff0 = formulas2[0].next_to(txt2, DOWN*2.5, aligned_edge=LEFT)
+        ff6 = formulas2[6].next_to(ff0, RIGHT*14)
+        self.play(Write(txt2), run_time=2)
+        self.play(Write(ff0), run_time=2)
+        self.play(Write(ff6), run_time=2)
+
+        for i in range(0, 3):
+            formulas2[i+1].next_to(formulas2[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas2[i+1]), run_time=2)
+            self.wait()
+
+        self.play(Write((formulas[13]).next_to(formulas[11], RIGHT, buff=0.3), run_time=2))
+        
+        for i in range(6, 9):
+            formulas2[i+1].next_to(formulas2[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas2[i+1]), run_time=2)
+            self.wait()
+        
+        ff3 = formulas2[3]
+        ff9 = formulas2[9]
+        self.play(Indicate(ff3[1]), Indicate(ff9[1]))
+
+        for i in range(9, 12):
+            formulas2[i+1].next_to(formulas2[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas2[i+1]), run_time=2)
+            self.wait()
+    
+        ff12 = formulas2[12]
+        
+        self.play(Indicate(ff3[3]), Indicate(ff12[1]))
+
+        for i in range(3, 5):
+            formulas2[i+1].next_to(formulas2[i], DOWN, aligned_edge=LEFT, buff=0.3)
+            self.play(Write(formulas2[i+1]), run_time=2)
+            self.wait()
+
+        self.play(Succession(Circumscribe(formulas[11]), Circumscribe(formulas2[5]), Circumscribe(formulas2[12])))
+        self.play(Write((formulas2[13]).next_to(txt2, RIGHT, buff=0.4), run_time=2))
+        self.wait()
