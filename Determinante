@@ -1,0 +1,101 @@
+from manim import *
+
+class CustomMatrix(Matrix):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.get_brackets().set_opacity(0)
+
+class Objects():
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.matrix1 = Matrix([
+            ["a_{11}", "a_{12}", "a_{13}"],
+            ["a_{21}", "a_{22}", "a_{23}"],
+            ["a_{31}", "a_{32}", "a_{33}"],
+        ])
+        
+        self.matrix2 = CustomMatrix([
+            ["a_{11}", "a_{12}", "a_{13}", "a_{11}", "a_{12}", "a_{13}"],
+            ["a_{21}", "a_{22}", "a_{23}", "a_{21}", "a_{22}", "a_{23}"],
+            ["a_{31}", "a_{32}", "a_{33}", "a_{31}", "a_{32}", "a_{33}"],
+        ])
+        
+        self.label1 = MathTex("A =").next_to(self.matrix1, LEFT)
+        self.label2 = MathTex("det(A) = ").shift(LEFT*5, DOWN*2.5)
+        
+        self.rectangles = VGroup(*[
+                self.create_diagonal_rect(color, shift_amount, rotation)
+                for color, shift_amount, rotation in [
+                    ("#fd01fc", LEFT*1.95, 45),
+                    ("#feff01", LEFT*0.65, 45),
+                    ("#f77a02", RIGHT*0.65, 45),
+                    ("#36ee4e", LEFT*1.95, -45),
+                    ("#f6394e", LEFT*0.65, -45),
+                    ("#36fef5", RIGHT*0.65, -45),
+                ]                ])
+        
+    
+        self.det = VGroup(*[
+            self.write_det(text, position, orientation, color)
+            for text, position, orientation, color in [
+                ("a_{11} \cdot a_{22} \cdot a_{33}", self.label2, RIGHT, "#fd01fc"),
+                ("a_{12} \cdot a_{23} \cdot a_{31}", self.label2, RIGHT*15, "#feff01"),
+                ("a_{13} \cdot a_{21} \cdot a_{32}", self.label2, RIGHT*29, "#f77a02"),
+                ("a_{31} \cdot a_{22} \cdot a_{13}", self.label2, DOWN + RIGHT, "#36ee4e"),
+                ("a_{32} \cdot a_{23} \cdot a_{11}", self.label2, DOWN + RIGHT*15, "#f6394e"),
+                ("a_{33} \cdot a_{21} \cdot a_{12}", self.label2, DOWN + RIGHT*29, "#36fef5"),
+            ]
+        ])
+        
+        self.symbols = [MathTex("+") if i < 3 else MathTex("-") for i in range(6)]
+        
+    def create_diagonal_rect(self, color, shift_amount, rotation):
+        rect = Rectangle(
+            color=color,
+            stroke_opacity=0.2,
+            fill_color=color,
+            fill_opacity=0.3,
+            height=4,
+            width=0.5
+        ).shift(shift_amount)
+        rect.rotate(rotation)
+        return rect
+    
+        
+    def write_det(self, text, position, orientation, color):
+        det = MathTex(text).next_to(position, orientation).set_color(color)
+        return det
+    
+class Video(Scene):
+    def construct(self):
+        
+        objects = Objects()
+        
+        self.play(Write(objects.label1))
+        self.wait()
+        self.play(Write(objects.matrix1))
+        self.wait()
+        self.play(Write(objects.label2))
+        self.wait()
+        self.play(Succession(FadeOut(objects.label1), objects.matrix1.animate.shift(LEFT * 1.95)))
+        self.play(Write(objects.matrix2))
+        self.wait()
+        for i in range(6):
+            if i == 0:
+                self.play(Write(objects.rectangles[i]))
+                self.wait()
+                self.play(Write(objects.det[i]))
+                self.wait()
+            elif i < 3:
+                self.play(Write(objects.rectangles[i]))
+                self.wait()
+                self.play(Write(objects.symbols[i].next_to(objects.det[i-1])))
+                self.play(Write(objects.det[i]))
+                self.wait()
+            else:
+                self.play(Write(objects.rectangles[i]))
+                self.wait()
+                self.play(Write(objects.symbols[i].next_to(objects.det[i], LEFT)))
+                self.play(Write(objects.det[i]))
+                self.wait()     
