@@ -1,101 +1,168 @@
-from manim import *
+from manim import * 
 
-class CustomMatrix(Matrix):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.get_brackets().set_opacity(0)
 
-class Objects():
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.matrix1 = Matrix([
-            ["a_{11}", "a_{12}", "a_{13}"],
-            ["a_{21}", "a_{22}", "a_{23}"],
-            ["a_{31}", "a_{32}", "a_{33}"],
-        ])
-        
-        self.matrix2 = CustomMatrix([
-            ["a_{11}", "a_{12}", "a_{13}", "a_{11}", "a_{12}", "a_{13}"],
-            ["a_{21}", "a_{22}", "a_{23}", "a_{21}", "a_{22}", "a_{23}"],
-            ["a_{31}", "a_{32}", "a_{33}", "a_{31}", "a_{32}", "a_{33}"],
-        ])
-        
-        self.label1 = MathTex("A =").next_to(self.matrix1, LEFT)
-        self.label2 = MathTex("det(A) = ").shift(LEFT*5, DOWN*2.5)
-        
-        self.rectangles = VGroup(*[
-                self.create_diagonal_rect(color, shift_amount, rotation)
-                for color, shift_amount, rotation in [
-                    ("#fd01fc", LEFT*1.95, 45),
-                    ("#feff01", LEFT*0.65, 45),
-                    ("#f77a02", RIGHT*0.65, 45),
-                    ("#36ee4e", LEFT*1.95, -45),
-                    ("#f6394e", LEFT*0.65, -45),
-                    ("#36fef5", RIGHT*0.65, -45),
-                ]                ])
-        
+def draw_arrow(origin, end, color):
+    arrow = Arrow(origin, end).set_color(color)
+    return arrow 
+
+
+def write_det(det, position, orientation, shift_amount):
+    determinante = det.next_to(position, orientation).shift(shift_amount)
+    return determinante
+
+
+
+def create_diagonal_rect(color, position, rotation):
+    rect = Rectangle(
+        color=color,
+        stroke_opacity=0.2,
+        fill_color=color,
+        fill_opacity=0.3,
+        height=2.5,
+        width=0.5
+    ).move_to(position)
+    rect.rotate(rotation)
+    return rect
     
-        self.det = VGroup(*[
-            self.write_det(text, position, orientation, color)
-            for text, position, orientation, color in [
-                ("a_{11} \cdot a_{22} \cdot a_{33}", self.label2, RIGHT, "#fd01fc"),
-                ("a_{12} \cdot a_{23} \cdot a_{31}", self.label2, RIGHT*15, "#feff01"),
-                ("a_{13} \cdot a_{21} \cdot a_{32}", self.label2, RIGHT*29, "#f77a02"),
-                ("a_{31} \cdot a_{22} \cdot a_{13}", self.label2, DOWN + RIGHT, "#36ee4e"),
-                ("a_{32} \cdot a_{23} \cdot a_{11}", self.label2, DOWN + RIGHT*15, "#f6394e"),
-                ("a_{33} \cdot a_{21} \cdot a_{12}", self.label2, DOWN + RIGHT*29, "#36fef5"),
-            ]
-        ])
-        
-        self.symbols = [MathTex("+") if i < 3 else MathTex("-") for i in range(6)]
-        
-    def create_diagonal_rect(self, color, shift_amount, rotation):
-        rect = Rectangle(
-            color=color,
-            stroke_opacity=0.2,
-            fill_color=color,
-            fill_opacity=0.3,
-            height=4,
-            width=0.5
-        ).shift(shift_amount)
-        rect.rotate(rotation)
-        return rect
-    
-        
-    def write_det(self, text, position, orientation, color):
-        det = MathTex(text).next_to(position, orientation).set_color(color)
-        return det
-    
-class Video(Scene):
+
+class Intro(Scene):
     def construct(self):
         
-        objects = Objects()
+        #part 1
+        header = Tex("\\underline{LGS: } A $\\vec{x} = \\vec{b}$").move_to([-4, 0, 0])
         
-        self.play(Write(objects.label1))
-        self.wait()
-        self.play(Write(objects.matrix1))
-        self.wait()
-        self.play(Write(objects.label2))
-        self.wait()
-        self.play(Succession(FadeOut(objects.label1), objects.matrix1.animate.shift(LEFT * 1.95)))
-        self.play(Write(objects.matrix2))
-        self.wait()
+        text_options = [Tex("genau eine Lösung"), Tex("keine Lösung"), Tex("unendlich viele Lösungen")]
+        text_positions = [[1, 2, 0], [1, 0, 0], [1, -2, 0]]
+        text_colors = [BLUE, PINK, YELLOW]
+        arrows = []
+        for i in range(3):
+            text_options[i].set_color(text_colors[i])
+            arrows.append(draw_arrow(header.get_right(), text_positions[i], text_colors[i]))
+        objects_1 = VGroup(header, *text_options, *arrows)
+    
+        
+        self.play(Write(header))
+        self.wait(3)
+        for i in range(3):
+            self.play(GrowArrow(arrows[i]))
+            self.wait()
+            self.play(Write(text_options[i].next_to(text_positions[i])))
+            self.wait()
+        self.play(objects_1.animate.scale(0.4).move_to([-4, 3, 0]))
+        
+        
+        #part 2
+        matrix = Matrix([
+            ["a_{11}", "a_{12}", "\dots", "a_{1n}"],
+            ["a_{21}", "a_{22}", "\dots", "a_{2n}"],
+            ["\\vdots", "\\vdots", "\\ddots", "\\vdots"],
+            ["a_{n1}", "a_{n2}", "\dots", "a_{nn}"]
+        ],left_bracket="(", right_bracket=")")
+        matrix.move_to([-5, 0, 0])
+        matrix_label = Tex("A = ")
+        matrix_label.next_to(matrix, LEFT)
+        
+        text_options2 = [
+                Tex("det(A) = 0 $\\Rightarrow$"),
+                Tex("det(A) $\\neq$ 0 $\\Rightarrow$"),
+                Tex("LGS eindeutig lösbar"),
+                Tex("keine Lösung"),
+                Tex("oder"),
+                Tex("unendlich viele Lösungen"),]
+        text_positions2 = [[0, 2, 0], [0, -2, 0], 
+                           [3.1, 2, 0], 
+                           [3.1, -1.5, 0], [3.1, -2, 0], [3.1, -2.5, 0]]
+        text_colors2 = [GREEN, RED, WHITE, WHITE, WHITE, WHITE]
+    
+        arrows2 = []
         for i in range(6):
-            if i == 0:
-                self.play(Write(objects.rectangles[i]))
+            text_options2[i].set_color(text_colors2[i]).next_to(text_positions2[i])
+            arrows2.append(draw_arrow(matrix.get_right(), text_positions2[i], text_colors2[i]))
+        
+        objects_2 = VGroup(matrix, matrix_label, *text_options2, *arrows2)
+        objects_2.scale(0.7)
+        
+        self.play(Succession(Write(matrix_label), (Write(matrix))))
+        for i in range(2):
+            self.play(GrowArrow(arrows2[i]))
+        for i in range(6):
+            if i == 0 or i == 2:
+                self.play(Write(text_options2[i]))
                 self.wait()
-                self.play(Write(objects.det[i]))
+        for i in range(6):
+            if i == 1 or i > 2:
+                self.play(Write(text_options2[i]))
                 self.wait()
-            elif i < 3:
-                self.play(Write(objects.rectangles[i]))
-                self.wait()
-                self.play(Write(objects.symbols[i].next_to(objects.det[i-1])))
-                self.play(Write(objects.det[i]))
-                self.wait()
-            else:
-                self.play(Write(objects.rectangles[i]))
-                self.wait()
-                self.play(Write(objects.symbols[i].next_to(objects.det[i], LEFT)))
-                self.play(Write(objects.det[i]))
-                self.wait()     
+    
+
+class Two_By_Two(Scene):
+    def construct(self):
+        matrix1 = Matrix([
+            ["a_{11}", "a_{12}"],
+            ["a_{21}", "a_{22}"]
+        ],left_bracket="(", right_bracket=")")
+        label1 = MathTex("A =").next_to(matrix1, LEFT)
+        
+        matrix2 = Matrix([
+             ["a_{11}", "a_{12}"],
+            ["a_{21}", "a_{22}"]
+        ],left_bracket="(", right_bracket=")").shift(LEFT*2)
+        label2 = MathTex("det(A) = det").next_to(matrix2, LEFT)
+        
+        rectangles = VGroup(*[
+            create_diagonal_rect(color, position, rotation)
+            for color, position, rotation in [
+                (BLUE_D, matrix2.get_center(), 45),
+                (PINK, matrix2.get_center(), -45),
+            ]])
+        
+        det_text = ["a_{11} \cdot a_{22}", "a_{21} \cdot a_{12}"]
+        determinante = MathTex(f"= {det_text[0]} - {det_text[1]}").next_to(matrix2)
+        
+        #Beispiel
+        text = Tex("Beispiel:").set_color(YELLOW_D).shift(LEFT*5, UP*3).scale(1.3)
+        label3 = MathTex("A =").next_to(text, DOWN*5)
+        matrix_example = Matrix([
+            ["2", "1"],
+            ["1", "3"]
+        ],left_bracket="(", right_bracket=")").next_to(label3)
+        
+        label4 = MathTex("det(A) =").next_to(label3, DOWN*5)
+        
+        det2 = [MathTex("2 \cdot 3"), MathTex("1 \cdot 1")]
+        det_group2 = VGroup(*[
+            write_det(det, position, orientation, shift_amount)
+            for det, position, orientation, shift_amount in [
+                (det2[0], label4, RIGHT, 0),
+                (det2[1], det2[0], RIGHT*3, 0),
+            ]])
+        result = MathTex("= 5").next_to(det_group2, RIGHT)
+        symbols = MathTex("-").next_to(det_group2[0])
+        
+        rectangles2 = VGroup(*[
+            create_diagonal_rect(color, position, rotation)
+            for color, position, rotation in [
+                (BLUE_D, matrix_example.get_center(), 45),
+                (PINK, matrix_example.get_center(), -45),
+            ]])
+        
+        
+        self.play(Succession(Write(label1), Write(matrix1)))
+        self.wait()
+        self.play(matrix1.animate.shift(UP*2+LEFT*4), label1.animate.shift(UP*2+LEFT*4))
+        self.wait()
+        self.play(Succession(Write(label2), Write(matrix2)))
+        self.play(Write(rectangles))
+        self.wait()
+        self.play(Write(determinante))
+        self.play(FadeOut(label1, label2, matrix1, matrix2, rectangles, determinante))
+        self.play(Succession(Write(text), Write(label3), Write(matrix_example)))
+        self.play(Write(label4))
+        self.wait()
+        self.play(Write(rectangles2))
+        self.play(Write(det_group2[0]))
+        self.play(Write(symbols[0]))
+        self.play(Write(det_group2[1]))
+        self.play(Write(result))
+
+           
