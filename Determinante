@@ -12,13 +12,13 @@ def write_det(det, position, orientation, shift_amount):
 
 
 
-def create_diagonal_rect(color, position, rotation):
+def create_diagonal_rect(size, color, position, rotation):
     rect = Rectangle(
         color=color,
         stroke_opacity=0.2,
         fill_color=color,
         fill_opacity=0.3,
-        height=2.5,
+        height=size,
         width=0.5
     ).move_to(position)
     rect.rotate(rotation)
@@ -110,10 +110,10 @@ class Two_By_Two(Scene):
         label2 = MathTex("det(A) = det").next_to(matrix2, LEFT)
         
         rectangles = VGroup(*[
-            create_diagonal_rect(color, position, rotation)
-            for color, position, rotation in [
-                (BLUE_D, matrix2.get_center(), 45),
-                (PINK, matrix2.get_center(), -45),
+            create_diagonal_rect(size, color, position, rotation)
+            for size, color, position, rotation in [
+                (2.5, BLUE_D, matrix2.get_center(), 45),
+                (2.5, PINK, matrix2.get_center(), -45),
             ]])
         
         det_text = ["a_{11} \cdot a_{22}", "a_{21} \cdot a_{12}"]
@@ -140,10 +140,10 @@ class Two_By_Two(Scene):
         symbols = MathTex("-").next_to(det_group2[0])
         
         rectangles2 = VGroup(*[
-            create_diagonal_rect(color, position, rotation)
-            for color, position, rotation in [
-                (BLUE_D, matrix_example.get_center(), 45),
-                (PINK, matrix_example.get_center(), -45),
+            create_diagonal_rect(size, color, position, rotation)
+            for size, color, position, rotation in [
+                (2.5, BLUE_D, matrix_example.get_center(), 45),
+                (2.5, PINK, matrix_example.get_center(), -45),
             ]])
         
         
@@ -165,4 +165,160 @@ class Two_By_Two(Scene):
         self.play(Write(det_group2[1]))
         self.play(Write(result))
 
-           
+
+class CustomMatrix(Matrix):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.get_brackets().set_opacity(0)
+        
+        
+class Three_By_Three(Scene):
+    def construct(self):
+        
+        
+        matrix1 = Matrix([
+            ["a_{11}", "a_{12}", "a_{13}"],
+            ["a_{21}", "a_{22}", "a_{23}"],
+            ["a_{31}", "a_{32}", "a_{33}"],
+        ],left_bracket="(", right_bracket=")")
+        
+        label1 = MathTex("A =").next_to(matrix1, LEFT)
+        
+        matrix2 = CustomMatrix([
+            ["a_{11}", "a_{12}", "a_{13}", "a_{11}", "a_{12}", "a_{13}"],
+            ["a_{21}", "a_{22}", "a_{23}", "a_{21}", "a_{22}", "a_{23}"],
+            ["a_{31}", "a_{32}", "a_{33}", "a_{31}", "a_{32}", "a_{33}"],
+        ])
+        
+        matrix_example = Matrix([
+            [2, 3, 4],
+            [1, 2, 1],
+            [0, 1, 3]
+        ],left_bracket="(", right_bracket=")")
+        
+        example_elements = [[matrix_example.get_mob_matrix()[i][i] for i in range(3)],
+                                 [matrix_example.get_mob_matrix()[0][1], matrix_example.get_mob_matrix()[2][0], matrix_example.get_mob_matrix()[1][2]],
+                                 [matrix_example.get_mob_matrix()[i][i-1] for i in range(3)],
+                                 [matrix_example.get_mob_matrix()[2][0], matrix_example.get_mob_matrix()[1][1], matrix_example.get_mob_matrix()[0][2]],
+                                 [matrix_example.get_mob_matrix()[2][1], matrix_example.get_mob_matrix()[1][2], matrix_example.get_mob_matrix()[0][0]],
+                                 [matrix_example.get_mob_matrix()[2][2], matrix_example.get_mob_matrix()[1][0], matrix_example.get_mob_matrix()[0][1]]]
+        
+        label2 = MathTex("det(A) = ").shift(LEFT*5, DOWN*2.5)
+        
+        label3 =  MathTex("det").next_to(matrix1, LEFT)
+
+        label4 =  MathTex("=").next_to(matrix_example, RIGHT)
+        
+        rectangles = VGroup(*[
+                create_diagonal_rect(size, color, shift_amount, rotation)
+                for size, color, shift_amount, rotation in [
+                    (4, "#a50f15", LEFT*1.95, 45),
+                    (4,"#fb6a4a", LEFT*0.65, 45),
+                    (4,"#fcbba1", RIGHT*0.65, 45),
+                    (4,"#9ecae1", LEFT*1.95, -45),
+                    (4,"#4292c6", LEFT*0.65, -45),
+                    (4,"#2171b5", RIGHT*0.65, -45)
+                ]             
+            ])
+        
+        
+        text1 = ["a_{11} \cdot a_{22} \cdot a_{33}", "a_{12} \cdot a_{23} \cdot a_{31}", "a_{13} \cdot a_{21} \cdot a_{32}",
+                      "a_{31} \cdot a_{22} \cdot a_{13}", "a_{32} \cdot a_{23} \cdot a_{11}", "a_{33} \cdot a_{21} \cdot a_{12}",]
+        color1 = ["#a50f15", "#ef3b2c", "#fcbba1", "#c6dbef", "#6baed6", "#2171b5"]
+        det1 = [MathTex(text1[i]).set_color(color1[i]) for i in range(6)]
+    
+        det_group1 = VGroup(*[
+            write_det(det, position, orientation, shift_amount)
+            for det, position, orientation, shift_amount in [
+                (det1[0], label2, RIGHT, 0),
+                (det1[1], det1[0], RIGHT*3, 0),
+                (det1[2], det1[1], RIGHT*3, 0),
+                (det1[3], det1[0], DOWN, 0),
+                (det1[4], det1[3], RIGHT*3, 0),
+                (det1[5], det1[4], RIGHT*3, 0),
+            ]
+        ])
+        
+        symbols = VGroup(*[MathTex("+") if i < 2 else MathTex("-") for i in range(5)])
+        
+        example = VGroup(matrix_example, label3, label4)
+        
+        text2 = ["2 \cdot 2 \cdot 3", "3 \cdot 1 \cdot 0", "4 \cdot 1 \cdot 1", "0 \cdot 2 \cdot 4", "1 \cdot 1 \cdot 2", "3 \cdot 1 \cdot 3", "= 5"]
+        color2 = ["#a50f15", "#ef3b2c", "#fcbba1", "#c6dbef", "#6baed6", "#2171b5", WHITE]
+        det2 = [MathTex(text2[i]).set_color(color2[i]) for i in range(7)]
+        
+        det_group2 = VGroup(*[
+            write_det(det, position, orientation, shift_amount)
+            for det, position, orientation, shift_amount in [
+                (det2[0], label4, LEFT*7.5, 0),
+                (det2[1], det2[0], RIGHT, LEFT*0.5),
+                (det2[2], det2[1], RIGHT, LEFT*0.5),
+                (det2[3], det2[2], RIGHT, LEFT*0.5),
+                (det2[4], det2[3], RIGHT, LEFT*0.5),
+                (det2[5], det2[4], RIGHT, LEFT*0.5),
+                (det2[6], det2[5], RIGHT, LEFT*1.25),
+            ]
+        ])
+        
+        det_2_results_text = [MathTex("12"), MathTex("0"), MathTex("4"), MathTex("0"), MathTex("2"), MathTex("9")]
+        det_2_results_colors = [det_2_results_text[i].set_color(color2[i]) for i in range(6)]
+        det_2_results = [det_2_results_colors[i].next_to(det_group2[i].get_center(), LEFT*2) for i in range(6)]
+    
+        self.play(Write(label1))
+        self.wait()
+        self.play(Write(matrix1))
+        self.wait()
+        self.play(Write(label2))
+        self.wait()
+        self.play(Succession(FadeOut(label1), matrix1.animate.shift(LEFT * 1.95)))
+        self.play(Write(matrix2))
+        self.wait()
+        for i in range(6):
+            if i == 0:
+                self.play(Write(rectangles[i]))
+                self.wait()
+                self.play(Write(det_group1[i]))
+                self.wait()
+            elif i < 3:
+                self.play(Write(rectangles[i]))
+                self.wait()
+                self.play(Write(symbols[i-1].next_to(det_group1[i-1])))
+                self.play(Write(det_group1[i]))
+                self.wait()
+            else:
+                self.play(Write(rectangles[i]))
+                self.wait()
+                self.play(Write(symbols[i-1].next_to(det_group1[i], LEFT)))
+                self.play(Write(det_group1[i]))
+                self.wait()     
+        self.play(FadeOut(matrix1, matrix2, rectangles, det_group1, label2), FadeOut(symbols))
+        self.wait(3)
+        self.play(Succession(Write(example), example.animate.shift(LEFT*4)))
+        self.wait()
+        for i in range(7):
+            if i == 0:
+                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(Write(det_group2[i]))
+                self.wait()
+                self.play(Transform(det_group2[i], det_2_results[i]))
+                self.play(*[ApplyMethod(element.set_color, WHITE) for element in example_elements[i]])
+                self.wait()
+            elif i < 3:
+                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(Write(symbols[i-1].next_to(det_group2[i-1])))
+                self.play(Write(det_group2[i]))
+                self.wait()
+                self.play(Transform(det_group2[i], det_2_results[i]))
+                self.play(*[ApplyMethod(element.set_color, WHITE) for element in example_elements[i]])
+                self.wait()
+            elif i < 6:
+                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(Write(symbols[i-1].next_to(det_group2[i], LEFT)))
+                self.play(Write(det_group2[i]))
+                self.wait()
+                self.play(Transform(det_group2[i], det_2_results[i]))
+                self.play(*[ApplyMethod(element.set_color, WHITE) for element in example_elements[i]])
+                self.wait()     
+            else: 
+                self.play(Write(det_group2[i]))
+                self.wait()      
