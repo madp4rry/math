@@ -64,15 +64,15 @@ class Intro(Scene):
         
         text_options2 = [
                 Tex("det(A) = 0 $\\Rightarrow$"),
-                Tex("det(A) $\\neq$ 0 $\\Rightarrow$"),
                 Tex("LGS eindeutig lösbar"),
+                Tex("det(A) $\\neq$ 0 $\\Rightarrow$"),
                 Tex("keine Lösung"),
                 Tex("oder"),
                 Tex("unendlich viele Lösungen"),]
-        text_positions2 = [[0, 2, 0], [0, -2, 0], 
-                           [3.1, 2, 0], 
+        text_positions2 = [[0, 2, 0], [3.1, 2, 0], 
+                           [0, -2, 0],  
                            [3.1, -1.5, 0], [3.1, -2, 0], [3.1, -2.5, 0]]
-        text_colors2 = [GREEN, RED, WHITE, WHITE, WHITE, WHITE]
+        text_colors2 = [WHITE, BLUE, WHITE, PINK, WHITE, YELLOW]
     
         arrows2 = []
         for i in range(6):
@@ -83,14 +83,13 @@ class Intro(Scene):
         objects_2.scale(0.7)
         
         self.play(Succession(Write(matrix_label), (Write(matrix))))
-        for i in range(2):
-            self.play(GrowArrow(arrows2[i]))
         for i in range(6):
             if i == 0 or i == 2:
+                self.play(GrowArrow(arrows2[i]))
+                self.wait()
                 self.play(Write(text_options2[i]))
                 self.wait()
-        for i in range(6):
-            if i == 1 or i > 2:
+            elif i == 1 or i > 2:
                 self.play(Write(text_options2[i]))
                 self.wait()
     
@@ -109,15 +108,25 @@ class Two_By_Two(Scene):
         ],left_bracket="(", right_bracket=")").shift(LEFT*2)
         label2 = MathTex("det(A) = det").next_to(matrix2, LEFT)
         
+        colors = ["#4DE43D", "#638BF7"]
+        
         rectangles = VGroup(*[
             create_diagonal_rect(size, color, position, rotation)
             for size, color, position, rotation in [
-                (2.5, BLUE_D, matrix2.get_center(), 45),
-                (2.5, PINK, matrix2.get_center(), -45),
+                (2.5, colors[0], matrix2.get_center(), 45),
+                (2.5, colors[1], matrix2.get_center(), -45),
             ]])
         
         det_text = ["a_{11} \cdot a_{22}", "a_{21} \cdot a_{12}"]
-        determinante = MathTex(f"= {det_text[0]} - {det_text[1]}").next_to(matrix2)
+        det_list = [MathTex(det_text[i]).set_color(colors[i]) for i in range(2)]
+        det_group1 = VGroup(*[
+            write_det(det, position, orientation, shift_amount)
+            for det, position, orientation, shift_amount in [
+                (det_list[0], matrix2, RIGHT, 0),
+                (det_list[1], det_list[0], RIGHT*3, 0),
+            ]
+        ])
+        symbol1 = MathTex("-").next_to(det_group1[0])
         
         #Beispiel
         text = Tex("Beispiel:").set_color(YELLOW_D).shift(LEFT*5, UP*3).scale(1.3)
@@ -129,21 +138,22 @@ class Two_By_Two(Scene):
         
         label4 = MathTex("det(A) =").next_to(label3, DOWN*5)
         
-        det2 = [MathTex("2 \cdot 3"), MathTex("1 \cdot 1")]
+        det_text2 = ["2 \cdot 3", "1 \cdot 1"]
+        det_list2 = [MathTex(det_text2[i]).set_color(colors[i]) for i in range(2)]
         det_group2 = VGroup(*[
             write_det(det, position, orientation, shift_amount)
             for det, position, orientation, shift_amount in [
-                (det2[0], label4, RIGHT, 0),
-                (det2[1], det2[0], RIGHT*3, 0),
+                (det_list2[0], label4, RIGHT, 0),
+                (det_list2[1], det_list2[0], RIGHT*3, 0),
             ]])
         result = MathTex("= 5").next_to(det_group2, RIGHT)
-        symbols = MathTex("-").next_to(det_group2[0])
+        symbol2 = MathTex("-").next_to(det_group2[0])
         
         rectangles2 = VGroup(*[
             create_diagonal_rect(size, color, position, rotation)
             for size, color, position, rotation in [
-                (2.5, BLUE_D, matrix_example.get_center(), 45),
-                (2.5, PINK, matrix_example.get_center(), -45),
+                (2.5, colors[0], matrix_example.get_center(), 45),
+                (2.5, colors[1], matrix_example.get_center(), -45),
             ]])
         
         
@@ -152,17 +162,25 @@ class Two_By_Two(Scene):
         self.play(matrix1.animate.shift(UP*2+LEFT*4), label1.animate.shift(UP*2+LEFT*4))
         self.wait()
         self.play(Succession(Write(label2), Write(matrix2)))
-        self.play(Write(rectangles))
-        self.wait()
-        self.play(Write(determinante))
-        self.play(FadeOut(label1, label2, matrix1, matrix2, rectangles, determinante))
+        for i in range(2):
+            self.play(Write(rectangles[i]))
+            self.wait()
+            self.play(Write(det_group1[i]))
+            self.wait()
+            if i < 1:
+                self.play(Write(symbol1))
+        self.play(FadeOut(label1, label2, matrix1, matrix2, rectangles, det_group1, symbol1))
+        self.wait(2)
         self.play(Succession(Write(text), Write(label3), Write(matrix_example)))
         self.play(Write(label4))
         self.wait()
-        self.play(Write(rectangles2))
-        self.play(Write(det_group2[0]))
-        self.play(Write(symbols[0]))
-        self.play(Write(det_group2[1]))
+        for i in range(2):
+            self.play(Write(rectangles2[i]))
+            self.wait()
+            self.play(Write(det_group2[i]))
+            self.wait()
+            if i < 1:
+                self.play(Write(symbol2))
         self.play(Write(result))
 
 
@@ -209,23 +227,23 @@ class Three_By_Three(Scene):
 
         label4 =  MathTex("=").next_to(matrix_example, RIGHT)
         
+        color = ["#4DE43D", "#638BF7", "#F7BC63", "#F763D0", "#FF4722", "#22FFB5", WHITE]
+        
         rectangles = VGroup(*[
                 create_diagonal_rect(size, color, shift_amount, rotation)
                 for size, color, shift_amount, rotation in [
-                    (4, "#a50f15", LEFT*1.95, 45),
-                    (4,"#fb6a4a", LEFT*0.65, 45),
-                    (4,"#fcbba1", RIGHT*0.65, 45),
-                    (4,"#9ecae1", LEFT*1.95, -45),
-                    (4,"#4292c6", LEFT*0.65, -45),
-                    (4,"#2171b5", RIGHT*0.65, -45)
+                    (4, color[0], LEFT*1.95, 45),
+                    (4, color[1], LEFT*0.65, 45),
+                    (4, color[2], RIGHT*0.65, 45),
+                    (4, color[3], LEFT*1.95, -45),
+                    (4, color[4], LEFT*0.65, -45),
+                    (4, color[5], RIGHT*0.65, -45)
                 ]             
             ])
         
-        
         text1 = ["a_{11} \cdot a_{22} \cdot a_{33}", "a_{12} \cdot a_{23} \cdot a_{31}", "a_{13} \cdot a_{21} \cdot a_{32}",
                       "a_{31} \cdot a_{22} \cdot a_{13}", "a_{32} \cdot a_{23} \cdot a_{11}", "a_{33} \cdot a_{21} \cdot a_{12}",]
-        color1 = ["#a50f15", "#ef3b2c", "#fcbba1", "#c6dbef", "#6baed6", "#2171b5"]
-        det1 = [MathTex(text1[i]).set_color(color1[i]) for i in range(6)]
+        det1 = [MathTex(text1[i]).set_color(color[i]) for i in range(6)]
     
         det_group1 = VGroup(*[
             write_det(det, position, orientation, shift_amount)
@@ -244,8 +262,8 @@ class Three_By_Three(Scene):
         example = VGroup(matrix_example, label3, label4)
         
         text2 = ["2 \cdot 2 \cdot 3", "3 \cdot 1 \cdot 0", "4 \cdot 1 \cdot 1", "0 \cdot 2 \cdot 4", "1 \cdot 1 \cdot 2", "3 \cdot 1 \cdot 3", "= 5"]
-        color2 = ["#a50f15", "#ef3b2c", "#fcbba1", "#c6dbef", "#6baed6", "#2171b5", WHITE]
-        det2 = [MathTex(text2[i]).set_color(color2[i]) for i in range(7)]
+        color = ["#4DE43D", "#638BF7", "#F7BC63", "#F763D0", "#FF4722", "#22FFB5", WHITE]
+        det2 = [MathTex(text2[i]).set_color(color[i]) for i in range(7)]
         
         det_group2 = VGroup(*[
             write_det(det, position, orientation, shift_amount)
@@ -261,7 +279,7 @@ class Three_By_Three(Scene):
         ])
         
         det_2_results_text = [MathTex("12"), MathTex("0"), MathTex("4"), MathTex("0"), MathTex("2"), MathTex("9")]
-        det_2_results_colors = [det_2_results_text[i].set_color(color2[i]) for i in range(6)]
+        det_2_results_colors = [det_2_results_text[i].set_color(color[i]) for i in range(6)]
         det_2_results = [det_2_results_colors[i].next_to(det_group2[i].get_center(), LEFT*2) for i in range(6)]
     
         self.play(Write(label1))
@@ -297,14 +315,14 @@ class Three_By_Three(Scene):
         self.wait()
         for i in range(7):
             if i == 0:
-                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(*[ApplyMethod(element.set_color, color[i]) for element in example_elements[i]])
                 self.play(Write(det_group2[i]))
                 self.wait()
                 self.play(Transform(det_group2[i], det_2_results[i]))
                 self.play(*[ApplyMethod(element.set_color, WHITE) for element in example_elements[i]])
                 self.wait()
             elif i < 3:
-                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(*[ApplyMethod(element.set_color, color[i]) for element in example_elements[i]])
                 self.play(Write(symbols[i-1].next_to(det_group2[i-1])))
                 self.play(Write(det_group2[i]))
                 self.wait()
@@ -312,7 +330,7 @@ class Three_By_Three(Scene):
                 self.play(*[ApplyMethod(element.set_color, WHITE) for element in example_elements[i]])
                 self.wait()
             elif i < 6:
-                self.play(*[ApplyMethod(element.set_color, color1[i]) for element in example_elements[i]])
+                self.play(*[ApplyMethod(element.set_color, color[i]) for element in example_elements[i]])
                 self.play(Write(symbols[i-1].next_to(det_group2[i], LEFT)))
                 self.play(Write(det_group2[i]))
                 self.wait()
