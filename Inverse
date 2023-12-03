@@ -1,0 +1,172 @@
+from manim import *
+
+def create_stroke(color, length, position, rotation):
+    stroke = Line(
+        color=color,
+    ).move_to(position).set_length(length).rotate(rotation)
+    return stroke
+
+class Inverse(Scene):
+    def construct(self):
+        
+        # defining objects
+        all_mobjects = []
+        
+        matrices = [Matrix([[1, 2], [3, 4]]),
+                    Matrix([[4, -3], [-2, 1]]),
+                    Matrix([["c_{11}", "c_{12}"], ["c_{21}", "c_{22}"]]),
+                    ]
+        for m in matrices: m.scale(0.5)
+        
+        texts = [Tex("Ist A regulär (det(A) $\\neq$ 0) $\\Rightarrow A^{-1} = \\frac{C^T}{det(A)}$"),
+                Tex("$\\leftarrow$ C ist die Kofaktormatrix"),
+                Tex("\\underline{gegeben:} A ="),
+                MathTex("det(A)","=1\\cdot4-2\\cdot3=4-6=-2"),
+                Tex("\\underline{Berechnung von C:}"),
+                MathTex("C ="),
+                MathTex("\\Rightarrow C ="),
+                ]
+        for t in texts: t.scale(0.6)
+        texts[1].set_color(BLUE)
+        texts[4].set_color(RED)
+        texts[3][0].set_color(RED)
+        
+        strokes = VGroup(*[
+            create_stroke(color, length, position, rotation)
+            for color, length, position, rotation in [
+                ("#F70E63", 1, (3.2, 1.4, 0), 0),
+                ("#F945E7", 0.7, (2.875, 1.2, 0), PI/2),
+                ("#F70E63", 1, (3.2, 0.45, 0), 0),
+                ("#F945E7", 0.7, (3.55, 0.25, 0), PI/2),
+                ("#F70E63", 1, (3.2, -0.9, 0), 0),
+                ("#F945E7", 0.7, (2.875, -0.7, 0), PI/2),
+                ("#F70E63", 1, (3.2, -1.85, 0), 0),
+                ("#F945E7", 0.7, (3.55, -1.65, 0), PI/2),
+            ]])
+        
+         # positioning objects
+        
+        texts[0].shift(UP*3+LEFT*3)
+        texts[1].next_to(texts[0], RIGHT, buff=0.1).shift(UP*0.2)
+        texts[2].next_to(texts[0], DOWN, aligned_edge=LEFT, buff=0.5)
+        texts[3].next_to(texts[2], DOWN, aligned_edge=LEFT, buff=0.6)
+        texts[4].next_to(texts[2], RIGHT, buff=4)
+        texts[5].next_to(texts[4], RIGHT, buff=0.5)
+        
+        matrices[0].next_to(texts[2], RIGHT)
+        matrices[2].next_to(texts[5], RIGHT)
+        
+        # displaying objects
+        
+        for t in range(6): 
+            self.play(Write(texts[t]))
+            self.wait(2)
+            if t == 2:
+                self.play(Write(matrices[t-2]))
+                self.wait(2)
+            elif t == 5:
+                self.play(Write(matrices[t-3]))
+                self.wait(2)
+                
+        # defining objects 2
+        
+        equations = [MathTex("c_{11} = (-1)^{","1","+","1","} \\cdot det"),
+                    MathTex("c_{12} = (-1)^{","1","+","2","} \\cdot det"),
+                    MathTex("c_{21} = (-1)^{","2","+","1","} \\cdot det"),
+                    MathTex("c_{22} = (-1)^{","2","+","2","} \\cdot det"),
+                    ]
+        for e in equations: e.scale(0.6)
+        
+        results = [MathTex("= 1 \\cdot det(4) = 4"),
+                   MathTex("= (-1) \\cdot det(3) = -3"),
+                   MathTex("= (-1) \\cdot det(2) = -2"),
+                   MathTex("= 1 \\cdot det(1) = 1"),
+                   ]
+        for r in results: r.scale(0.6)
+        
+        # displaying objects 2
+        
+        equations[0].next_to(texts[4], DOWN, aligned_edge=LEFT, buff=0.6)
+        self.play(Write(equations[0]))
+        
+        m_copies = []
+        for i in range(4):
+            m_copy = matrices[0].copy()
+            m_copies.append(m_copy)
+            if i > 0:
+                self.play(Write(equations[i].next_to(equations[i-1], DOWN, aligned_edge=LEFT, buff=0.6)))
+            self.play(Write(m_copies[i].next_to(equations[i], RIGHT)))
+            self.play(Succession(equations[i][1].animate.set_color("#F70E63"), Write(strokes[2*i])))
+            self.play(Succession(equations[i][3].animate.set_color("#F945E7"), Write(strokes[2*i+1])))
+            self.play(Write(results[i].next_to(m_copies[i], RIGHT)))
+            self.wait(2)
+            
+        self.play(Succession(Write(texts[6].next_to(equations[3], DOWN, aligned_edge=LEFT, buff=0.6)),
+                  Write(matrices[1].next_to(texts[6]))))  
+        self.wait(2)
+        
+        for t in texts:
+            all_mobjects.append(t)
+        for m in matrices:
+            all_mobjects.append(m)
+        for e in equations:
+            all_mobjects.append(e)
+        for r in results:
+            all_mobjects.append(r)
+        for c in m_copies:
+            all_mobjects.append(c)
+        for s in strokes:
+            all_mobjects.append(s)
+        
+        #defining objects 3 
+        
+        f_matrices = [Matrix([[1, 2], [3, 4]]),
+                      Matrix([[4, -3], [-2, 1]]),
+                      Matrix([[-2, 1], ["3/2", "-1/2"]], element_alignment_corner=ORIGIN),
+                      Matrix([[1, 0], [0, 1]]),
+                      Matrix([[4, -2], [-3, 1]]),
+                      Matrix([[4, -3], [-2, 1]]),
+                      Matrix([[-2, 1], ["3/2", "-1/2"]], element_alignment_corner=ORIGIN),
+                      ]
+        for m in f_matrices: m.scale(0.5)
+        
+        f_texts = [MathTex("A^{-1} = \\frac{C^T}{det(A)}"),
+                   MathTex("det(A) = -2"),
+                   MathTex("C = "),
+                   MathTex("\\Rightarrow \\bold{A}^{-1} = -\\frac{1}{2}"),
+                   Tex("\\underline{Probe:}"),
+                   MathTex("\\bold{AA}^{-1} ="),
+                   Tex("="),
+                   Tex("="),
+                   ]
+        for t in f_texts: t.scale(0.6)
+        
+        f_texts[0].shift(LEFT*5, UP*3)
+        c = VGroup(f_texts[2], f_matrices[1].next_to(f_texts[2], RIGHT)).next_to(f_texts[0], buff=0.5)
+        
+        self.play(
+                FadeOut(Group(*all_mobjects)),
+                TransformFromCopy(texts[0], f_texts[0]),
+                TransformFromCopy(matrices[1], c),
+                TransformFromCopy(texts[3], f_texts[1].next_to(c, RIGHT, buff=0.5)), 
+                run_time=2
+                )
+        self.wait(2)
+         
+
+        self.play(Write(f_texts[3].next_to(f_texts[0], DOWN, aligned_edge=LEFT, buff=1),))
+        self.play(Write(f_matrices[4].next_to(f_texts[3], RIGHT)))
+        self.wait(2)
+        self.play(Write(f_texts[6].next_to(f_matrices[4])))
+        self.wait(2)
+        self.play(Write(f_matrices[2].next_to(f_texts[6])))
+        self.wait(2)
+        self.play(Write(f_texts[4].next_to(f_texts[3], DOWN, aligned_edge=LEFT, buff=1)))
+        self.wait()
+        self.play(Write(f_texts[5].next_to(f_texts[4], RIGHT+DOWN)))
+        self.play(Succession(Write(f_matrices[5].next_to(f_texts[5], RIGHT)), 
+                             Write(f_matrices[6].next_to(f_matrices[5], RIGHT))))
+        self.wait(2)
+        self.play(Write(f_texts[7].next_to(f_matrices[6])))
+        self.play(Write(f_matrices[3].next_to(f_texts[7])))
+        self.wait()
